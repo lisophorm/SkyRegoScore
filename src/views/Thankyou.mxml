@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 remove="exit(event)" creationComplete="created(event)" 
+		 xmlns:components="views.components.*">
+	
+	<fx:Metadata>
+		[Event(name="restart", type="events.ViewEvent")]
+	</fx:Metadata>
+	
+	<fx:Script>	
+		<![CDATA[
+			import com.greensock.TweenMax;
+			import com.utils.Console;
+			
+			import mx.events.FlexEvent;
+			
+			import events.ViewEvent;
+			
+			import model.ML;
+			
+			
+			protected var intervallo:Number;
+			
+			public function created(event:FlexEvent=null):void
+			{
+				this.addEventListener( Event.INIT, init);
+			}
+			
+			public function init(event:Event=null):void
+			{
+				//trace("Thankyou :: init");
+				//Console.log("*** Thankyou :: init ***", this);
+				TweenMax.delayedCall(2, close);
+				//intervallo=setInterval(close,2000);
+				//var temp:File=File.applicationDirectory.resolvePath("/data/data/air.BarclaysFaceBook01/cache/webviewCache");
+				
+			}
+			
+			protected function exit(event:Event):void
+			{
+				//	Console.log("*** Thankyou :: exit ***", this);
+				// TODO Auto-generated method stub
+				TweenMax.killTweensOf(this);
+				//	clearInterval(intervallo);
+				//				trace("*** EXIT APPLICATIONTYPE ***");	
+			}
+			
+			protected function close():void 
+			{
+				//	trace("Thankyou :: close");
+				//	Console.log("*** Thankyou :: close ***", this);
+				TweenMax.killTweensOf(this);
+				//	clearInterval(intervallo);
+				//navigator.popToFirstView();
+				parentApplication.dispatchEvent(new ViewEvent( ViewEvent.LOCATION_RESTART ));
+				
+			}
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<s:VGroup width="100%" height="597" horizontalAlign="center" verticalAlign="middle">
+		<s:Spacer width="10" height="30"/>
+		<s:Label textAlign="center" styleName="thankyou" text="Thank you"  />
+		<s:Spacer width="10" height="30"/>
+	</s:VGroup>
+</s:Group>

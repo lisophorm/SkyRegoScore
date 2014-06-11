@@ -1,0 +1,417 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		currentState="default" 
+		xmlns:components="views.components.*"  
+		remove="exit(event)" 
+		creationComplete="created(event)"
+		 width="100%"
+		 height="100%"
+		>
+	
+	<fx:Script>
+		<![CDATA[
+			import com.alfo.utils.EncryptWrapper;
+			import com.utils.Console;
+			
+			import mx.events.FlexEvent;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			import events.CameraEvent;
+			import events.GreenscreenEvent;
+			import events.GreenscreenModuleEvent;
+			import events.KioskError;
+			import events.KioskProgressEvent;
+			import events.KioskWaitEvent;
+			import events.ViewEvent;
+			
+			import model.CameraDevice;
+			import model.Config;
+			import model.GreenscreenModel;
+			
+			import views.cameracapture.secondscreen.CameraSecondScreenWindow;
+			import views.components.ProgressPopUp;
+			
+			protected var webcamera:CameraDevice
+			private var urlRequest:URLRequest
+			private var file:File;
+			private var activeFile:File;
+			
+			private var currentURN:String;
+			private var team:String = "Arsenal"; 
+			private var progressPop:ProgressPopUp;
+			protected var fileTransfer:Boolean=false;
+			
+			[Bindable]
+			public var userName:String="";
+			
+			[Bindable]
+			public var posts:int = 0;
+			
+			[Bindable]
+			public var data:Object;
+			
+			private var cameraWindow:CameraSecondScreenWindow;
+			
+			protected var applicationType:int = 0;
+			public function created(event:FlexEvent=null):void
+			{
+				this.addEventListener( Event.INIT, init);
+			}
+			public function init(event:Event=null):void
+			{
+				trace("*** INIT CAMERACAPTURE ***");
+				//facebook_specifics.visible =  this.parentApplication.isFacebookRegistered
+				data = this.parentApplication.data
+				if (data!=null)
+				{
+					currentURN = data.urn;
+					applicationType = data.type;
+					team = data.team? data.team : team;
+					this.currentState = data.facebook ? "facebook" : "default";
+					publishPhoto.url = this.parentApplication.localURL+'publishphoto.php';
+					getUser.url = this.parentApplication.baseURL+'getuser.php';
+					
+					var passVars:Object=new Object;
+					passVars.urn=EncryptWrapper.Wrap(currentURN);
+					
+					// LOOK-UP USER INFO FOR THIS URN
+					getUser.send(passVars);
+					fileTransfer=false;
+					
+				} else {
+					trace("URN MISSING");
+				}	
+				
+				// code specific to opening second screen and attaching CameraWindow View
+				
+				trace("Main screen:"+ Screen.mainScreen.visibleBounds.left+" "+Screen.mainScreen.visibleBounds.top);
+				var secondscreen:Number=0;
+				for(var i:Number=0;i<Screen.screens.length;i++) {
+					trace(i+" screen:"+Screen.screens[i].visibleBounds.left+" "+Screen.screens[i].visibleBounds.top);
+					if(Screen.screens[i].visibleBounds.left != Screen.mainScreen.visibleBounds.left) {
+						secondscreen=i;
+					}
+				}
+				trace("secondary screen is:"+secondscreen);
+				cameraWindow=new CameraSecondScreenWindow();
+				cameraWindow.open();
+				cameraWindow.move(Screen.screens[secondscreen].visibleBounds.left,Screen.screens[secondscreen].visibleBounds.top);
+				cameraWindow.width=Screen.screens[secondscreen].visibleBounds.width;
+				cameraWindow.height=Screen.screens[secondscreen].visibleBounds.height;
+				
+			}
+			protected function exit(e:Event=null):void
+			{
+				if(cameraWindow) {
+					cameraWindow.close();
+					cameraWindow=null;
+				}
+				
+				trace("*** EXIT CAMERACAPTURE ***");
+				if (webcamera!=null)
+				{
+					webcamera.destroy();
+					if (videoholder.containsElement( webcamera) )
+					{
+						videoholder.removeElement( webcamera )
+						webcamera = null;
+					}
+					
+				}
+			}
+			
+			protected function getUser_resultHandler(event:ResultEvent):void
+			{
+				userName 	= EncryptWrapper.Wrap(getUser.lastResult.name);
+				posts 		= int(EncryptWrapper.Wrap(getUser.lastResult.posts));
+				if (this.currentState=="facebook")
+					facebookposts_check.selected = this.canPost;
+				trace("** USER INFO RETRIVED:\nUser's lastname:"+user.text+"\nPosts:"+posts);
+				
+				this.setupCamera()
+			}
+			
+			protected function httpservice_faultHandler(event:FaultEvent):void
+			{
+				this.parentApplication.dispatchEvent(new KioskError(KioskError.ERROR, event.fault.faultString, "NETWORK ERROR", this.restart));
+
+			}
+			
+
+// CAMERA HANDLING
+			
+			//take a new picture with the camera
+			protected function setupCamera():void
+			{
+				takePhotoButton.mouseEnabled = takePhotoButton.buttonMode = true;
+				if (CameraUI.isSupported)
+				{
+					takePhotoButton.removeEventListener( MouseEvent.CLICK, takePhoto);
+					takePhotoButton.addEventListener( MouseEvent.CLICK, takePhoto);
+				} else 
+				{
+					if (CameraDevice.isSupported)
+					{
+						//Console.log("standard camera not supported",this);
+						if (webcamera!=null)
+						{
+							webcamera.destroy();
+							videoholder.removeElement( webcamera );
+							webcamera = null;
+						}
+						
+						webcamera = new CameraDevice(320,240, this.currentURN); // actual camera will be x4 this size					
+						webcamera.addEventListener(CameraEvent.COMPLETE, takePhotoStandardCompleteHandler);
+						webcamera.addEventListener(CameraEvent.PROGRESS, progressUpdate );
+						
+						
+						videoholder.addElement( webcamera );
+						videoholder.swapElementsAt( 0,1 );
+						takePhotoButton.removeEventListener( MouseEvent.CLICK, webcamera.takePhoto);
+						takePhotoButton.addEventListener( MouseEvent.CLICK, webcamera.takePhoto);	
+					} else 
+					{
+					//	Console.log("camera not supported",this);
+						this.parentApplication.dispatchEvent(new KioskError(KioskError.ERROR, "CAMERA NOT SUPPORTED", "DEVICE ERROR"));
+						statusText.text = "Camera not supported on this device.";	
+					}
+					
+				}
+			}
+			protected function progressUpdate( e:CameraEvent ):void
+			{
+				this.parentApplication.dispatchEvent( new KioskProgressEvent(KioskProgressEvent.UPDATE, e.data.message, e.data.title) )
+			}
+			protected function takePhoto(event:MouseEvent):void
+			{
+				if (CameraUI.isSupported)
+				{
+					
+					//Console.log("CameraUI is supported",this);
+					var myCam:CameraUI = new CameraUI();
+					myCam.launch(MediaType.IMAGE);
+					myCam.addEventListener(MediaEvent.COMPLETE,takePhotoCompleteHandler);
+				
+				}
+				
+			}
+			
+			//select a picture from the camera roll (gallery)
+			protected function uploadGallery_clickHandler(event:MouseEvent):void
+			{
+				if (CameraRoll.supportsBrowseForImage)
+				{
+					trace("camera roll is supported");
+					var roll:CameraRoll = new CameraRoll();
+					roll.browseForImage();
+					roll.addEventListener(MediaEvent.SELECT,takePhotoCompleteHandler);
+				}
+				else
+				{
+					trace("camera roll not supported");
+					statusText.text = "Camera roll not supported on this device.";
+				}
+			}
+			
+			//when the selection is complete upload it
+			protected function takePhotoCompleteHandler(event:MediaEvent):void
+			{
+				this.activeFile = event.data.file;
+				checkWithUser( )
+			}
+			
+			protected function takePhotoStandardCompleteHandler(event:CameraEvent):void
+			{
+				this.activeFile = event.data.file; 
+				checkWithUser(  )
+			}
+			protected function checkWithUser( ):void
+			{
+				this.parentApplication.dispatchEvent ( new GreenscreenModuleEvent( acceptPhoto, cancelPhoto, this.activeFile.url ) );
+				NativeApplication.nativeApplication.activate(); // focus on top
+			}
+			
+			protected function acceptPhoto( e:Event=null ):void {
+				
+				var pref:Config = new Config();
+				var photoshop:String = pref.prefsXML..photoshop.text().toString()
+				//Console.log("User accepted photo "+ photoshop, this);
+				var calibrator:String = pref.prefsXML..calibrator.text().toString();
+				
+				//accept photo arsenal need to be variable
+				var greenscreenModel:GreenscreenModel = new GreenscreenModel( this.currentURN, team, calibrator, photoshop);
+				
+				greenscreenModel.addEventListener( GreenscreenEvent.WAIT, greenscreenWait);
+				greenscreenModel.addEventListener( GreenscreenEvent.ERROR, greenscreenError);
+				greenscreenModel.addEventListener( GreenscreenEvent.PHOTO_READY, greenscreenPhotoReady);
+				
+				greenscreenModel.send( this.activeFile );
+			}
+			protected function greenscreenWait( e:GreenscreenEvent=null ):void 
+			{
+				//Console.log( e.data.message, this);
+				this.parentApplication.dispatchEvent( new KioskWaitEvent(  e.data.message ) ); 
+			}
+			protected function greenscreenError( e:GreenscreenEvent=null ):void 
+			{
+				this.parentApplication.dispatchEvent( new KioskError( KioskError.ERROR,  e.data.message,  e.data.title ) ); 
+			}
+			protected var greenscreenPhoto:File;
+			protected function greenscreenPhotoReady( e:GreenscreenEvent ):void
+			{
+				//this.parentApplication.clearPopups();
+				greenscreenPhoto = File(e.data.file)
+				this.parentApplication.dispatchEvent ( new GreenscreenModuleEvent( acceptGreenscreenPhoto, cancelPhoto, greenscreenPhoto.url ));
+				NativeApplication.nativeApplication.activate();
+			}
+			protected function acceptGreenscreenPhoto( e:MouseEvent=null  ):void
+			{
+					//Console.log("PHOTO ACCEPTED - Upload", this);
+					beginUpload( this.greenscreenPhoto );
+					
+			}
+			protected function cancelPhoto( e:Event=null ):void {
+				this.setupCamera();
+			}
+			
+			protected function beginUpload(file:File):void
+			{
+				urlRequest = new URLRequest(this.parentApplication.localURL+"uploader.php");
+				//Console.log("event.data.file.url; = "+file.url, this);
+				takePhotoButton.enabled = false;
+				this.file = file;
+				file.addEventListener(Event.COMPLETE,uploadCompleteHandler);
+				file.addEventListener(Event.OPEN,openUploadHandler);
+				file.addEventListener(ProgressEvent.PROGRESS,updateProgress);
+				file.addEventListener(IOErrorEvent.IO_ERROR,onFileError);
+				file.upload(urlRequest);
+				fileTransfer=true;
+				this.parentApplication.dispatchEvent( new KioskProgressEvent(KioskProgressEvent.NOTIFY, "Uploading file" ) );
+			}
+			
+			protected function onFileError(error:IOErrorEvent):void
+			{
+				this.parentApplication.dispatchEvent( new KioskError(KioskError.ERROR, error.text.toString(), "I/O error while uploading the file" ) );
+			}
+			
+			protected function updateProgress(event:ProgressEvent):void
+			{
+				var perc:Number=Math.round(event.bytesLoaded*100/event.bytesTotal);
+				this.parentApplication.dispatchEvent( new KioskProgressEvent(KioskProgressEvent.UPDATE, String(perc)+"% complete"));
+				trace("progress:"+event.bytesLoaded+ "of:"+event.bytesTotal);
+			}
+			
+			protected function uploadCompleteHandler(event:Event):void
+			{
+				this.parentApplication.dispatchEvent( new KioskProgressEvent( KioskProgressEvent.UPDATE_COMPLETE ));
+				//Console.log("Upload complete", this);
+				takePhotoButton.enabled = true;
+				statusText.text = "Photo Uploaded";
+				var passVars:Object=new Object();
+				passVars.urn=currentURN;
+				passVars.file=basename(file.url);
+				
+				if (this.currentState=="facebook")
+					passVars.facebook_optin= this.facebookposts_check.selected ? 1 : 0;
+				else
+					passVars.facebook_optin= 0;
+				
+				passVars.type = this.applicationType;
+				publishPhoto.send(passVars);
+				statusText.text = "Publishing on Facebook...";
+				this.parentApplication.dispatchEvent( new KioskProgressEvent(KioskProgressEvent.NOTIFY, "Publishing on Facebook..."));
+				
+			}
+			
+			
+			
+			protected function openUploadHandler(event:Event):void
+			{
+				trace("uploading");
+				statusText.text = "Uploading...";
+			}
+			
+			
+			public function basename(path:String):String {
+				var index:Number = path.lastIndexOf('/');
+				if (index != -1) {
+					return path.substr(index + 1);
+				}
+				return path;
+			}
+			
+			protected function publishPhoto_resultHandler(event:ResultEvent):void
+			{
+				this.parentApplication.dispatchEvent( new KioskProgressEvent( KioskProgressEvent.UPDATE_COMPLETE ));
+				if(event.result.result!="SUCCESS") 
+				{
+					this.parentApplication.dispatchEvent(new KioskError(KioskError.ERROR, event.result.message, "ERROR", restart));
+				} else 
+				{
+					// INCREMENT POSTS BY ONE + 
+					posts +=1;
+					complete();
+				}
+			}
+			
+			protected function complete():void
+			{
+						this.parentApplication.dispatchEvent( new ViewEvent( ViewEvent.LOCATION_GAME_COMPLETE ) );
+			}
+			
+			
+			public function restart(e:Event=null):void
+			{
+				this.parentApplication.dispatchEvent( new ViewEvent( ViewEvent.LOCATION_RESTART ) );
+			}
+			
+			protected function cancelBTN_clickHandler(event:MouseEvent):void
+			{
+				if(fileTransfer) {
+					file.removeEventListener(Event.COMPLETE,uploadCompleteHandler);
+					file.removeEventListener(Event.OPEN,openUploadHandler);
+					file.removeEventListener(ProgressEvent.PROGRESS,updateProgress);
+					file.removeEventListener(IOErrorEvent.IO_ERROR,onFileError);
+				}
+				this.parentApplication.dispatchEvent( new ViewEvent( ViewEvent.LOCATION_RESTART ));
+			}
+			
+			protected function get canPost():Boolean
+			{
+				
+				return (int(posts)<5);
+			}
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<s:HTTPService id="publishPhoto" resultFormat="flashvars" method="POST" url="{this.parentApplication.localURL+'publishphoto.php'}" result="publishPhoto_resultHandler(event)" fault="httpservice_faultHandler(event)" />
+		<s:HTTPService id="getUser" resultFormat="flashvars" method="POST" url="{this.parentApplication.localURL+'getuser.php'}"  result="getUser_resultHandler(event)" fault="httpservice_faultHandler(event)" />
+	</fx:Declarations>
+	<s:states>
+		<s:State name="default" />
+		<s:State name="facebook" />
+	</s:states>
+	
+	<s:VGroup styleName="Game" horizontalAlign="center" verticalAlign="middle" width="100%" height="592" verticalCenter="0">
+		<s:VGroup id="videoholder" horizontalCenter="0" verticalCenter="0">
+			<s:HGroup width="100%" horizontalAlign="center"><s:Button id="takePhotoButton" horizontalCenter="0" label="Shoot Photo" skinClass="skins.barclaysButton"/></s:HGroup>
+		</s:VGroup>		
+		<s:VGroup>
+			<s:Label id="statusText" />
+			<s:HGroup horizontalAlign="left">
+				<s:Label width="400" text="Name"/><s:Spacer width="20" /><s:Label text="{userName}" id="user"  styleName="userInfo" />
+			</s:HGroup>
+			<s:Spacer height="5" />
+			<s:HGroup horizontalAlign="left" includeIn="facebook"><s:Label width="400" text="Published Facebook Posts:"/><s:Spacer width="20" /><s:Label text="{posts}" id="facebookposts_label" styleName="userInfo" /></s:HGroup>
+			
+			<s:HGroup><s:CheckBox id="facebookposts_check"  label="Post to Facebook?" skinClass="skins.vodafoneCheckBox" /></s:HGroup>
+			
+			</s:VGroup>
+		</s:VGroup>
+	
+</s:Group>

@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" 
+		 xmlns:mainscreen="views.cameracapture.mainscreen.*"
+		 width="100%" height="100%"
+		 creationComplete="creationCompleteHandler(event)" 
+		 remove="removedHandler(event)"
+		 xmlns:layout="org.osmf.layout.*">
+	
+	<fx:Script>
+		<![CDATA[
+			import com.alfo.utils.GreenScreenPrefs;
+			import com.alfo.utils.PictureWatcher;
+			import com.alfo.utils.WatchEvent;
+			import com.greensock.TweenMax;
+			
+			import events.CameraCaptureEvent;
+			import events.KioskError;
+			import events.KioskProgressEvent;
+			import events.ViewEvent;
+			
+			import model.Settings;
+			import model.TeamModel;
+			
+			import views.cameracapture.secondscreen.CameraSecondScreenWindow;
+			
+			private var loader:URLLoader;
+			
+			private var greenScreenPrefs:GreenScreenPrefs = new GreenScreenPrefs();
+			private var finalWatch:PictureWatcher;
+			private var folderWatch:PictureWatcher;
+			private var settings:Settings;
+			private var teamModel:TeamModel;
+			
+			private var uploadFile:File;
+			private var urlRequest:URLRequest;
+			
+			[Bindable]
+			private var cameraWindow:CameraSecondScreenWindow;
+			
+			protected function creationCompleteHandler(event : Event):void
+			{
+				addEventListener(Event.INIT, init);
+			}
+			
+			public function init(event : Event):void
+			{
+				
+				urlRequest= new URLRequest(this.parentApplication.localURL+"uploader.php");
+				
+				trace("begin of camera: upload url "+urlRequest.url);
+				
+				currentState = "instruction";
+				
+				teamModel = TeamModel.instance;
+				
+				settings = Settings.instance;
+				
+				var file : File = File.desktopDirectory.resolvePath("calibrator/settings/appSettings.txt");
+				
+				loader = new URLLoader();
+				loader.addEventListener(Event.COMPLETE, settingsLoadCompleteHandler);
+				loader.load(new URLRequest(file.url));
+			}
+			
+			public function settingsLoadCompleteHandler(event : Event):void
+			{
+				settings.cameraSettings = String(loader.data).split("|");
+
+				var secondscreen:Number=0;
+				for(var i:Number=0;i<Screen.screens.length;i++) 
+				{
+					if(Screen.screens[i].visibleBounds.left != Screen.mainScreen.visibleBounds.left) {
+						secondscreen=i;
+					}
+				}
+				cameraWindow=new CameraSecondScreenWindow();
+				cameraWindow.open();
+				cameraWindow.alwaysInFront=true;
+				cameraWindow.move(Screen.screens[secondscreen].visibleBounds.left,Screen.screens[secondscreen].visibleBounds.top);
+				cameraWindow.width=Screen.screens[secondscreen].visibleBounds.width;
+				cameraWindow.height=Screen.screens[secondscreen].visibleBounds.height;
+				cameraWindow.currentState = "instruction";
+			}
+			
+			protected function updateCountdown(event:CameraCaptureEvent):void
+			{
+				if(cameraWindow)
+				{
+					cameraWindow.updateCountdownDisplay(event);
+				}
+			}
+			
+			protected function instructionContinueHandler(event:CameraCaptureEvent):void
+			{
+				photoCaptureStartHandler();
+				currentState='countdown';
+			}
+			
+			protected function photoCaptureStartHandler():void
+			{
+				writeURN();
+				emptyCaptures();
+				if (greenScreenPrefs.basePath!=null && greenScreenPrefs.photoShopPath!=null)
+				{					
+					// watches for the canon camera photos
+					folderWatch=new PictureWatcher();
+					folderWatch.setWatchFolder(greenScreenPrefs.basePath + File.separator + "captures");
+					folderWatch.addEventListener(WatchEvent.ON_ADD_PHOTO,compositImage);
+					folderWatch.startWatch();
+					
+					// photoShop output Folder
+					finalWatch=new PictureWatcher();
+					finalWatch.setWatchFolder(greenScreenPrefs.basePath + File.separator + "output");
+					finalWatch.addEventListener(WatchEvent.ON_ADD_PHOTO,displayFinalPhoto);
+				}
+			}
+			
+			public function removedHandler(event : Event):void
+			{
+				if(cameraWindow)
+				{
+					cameraWindow.close();
+					cameraWindow = null;
+				}
+			}
+			
+			protected function retakeHandler(event : CameraCaptureEvent):void
+			{
+				var oldPhoto:File=File.applicationDirectory.resolvePath(greenScreenPrefs.basePath + File.separator + "output" + File.separator + settings.userData.imageID + ".jpg");
+				oldPhoto.deleteFile();
+				photoCaptureStartHandler();
+				currentState="countdown";
+			}
+			
+			protected function cameraCompleteHandler(event:CameraCaptureEvent):void
+			{
+				
+				uploadFile.removeEventListener(Event.COMPLETE,uploadCompleteHandler);
+				uploadFile.removeEventListener(Event.OPEN,openUploadHandler);
+				uploadFile.removeEventListener(DataEvent.UPLOAD_COMPLETE_DATA,uploadDataComplete);
+				uploadFile.removeEventListener(ProgressEvent.PROGRESS,updateProgress);
+				uploadFile.removeEventListener(IOErrorEvent.IO_ERROR,onFileError);
+				
+				this.parentApplication.dispatchEvent( new ViewEvent( ViewEvent.LOCATION_RESTART ));
+			}
+			
+			protected function writeURN():void
+			{
+				var urnConfigFile:File = File.applicationDirectory.resolvePath(greenScreenPrefs.basePath+File.separator+
+					"settings" + File.separator + "urn.jsx");
+				
+				var uniqueCode : String = Math.random().toString().substr(2,5);
+				settings.userData.imageID = settings.userData.urn + "_" + uniqueCode;
+				var backgroundImageName : String = teamModel.teamList[settings.userData.teamID].backgroundImage;
+				var cupImage : String = teamModel.teamList[settings.userData.teamID].cupImage;
+				var data:String = "var URN=\"" + settings.userData.imageID + "\"\nvar club_trophy=\"" + cupImage + "\"\nvar bkgImg=\"" + backgroundImageName + "\""; 
+				var stream:FileStream = new FileStream();
+//				
+				stream.close()
+				stream.open(urnConfigFile, FileMode.WRITE);
+				stream.writeUTFBytes(data);
+				stream.close();
+			}
+			
+			protected function compositImage(event : WatchEvent):void
+			{
+				folderWatch.stopWatch();
+				finalWatch.startWatch();
+				var photo:File=File.applicationDirectory.resolvePath(greenScreenPrefs.basePath + File.separator + "captures" + File.separator + "capture.jpg");
+				photo.copyTo(File.applicationDirectory.resolvePath(greenScreenPrefs.basePath + File.separator + "tmp" + File.separator + settings.userData.imageID + ".jpg"),true);
+				
+				var file:File=File.applicationDirectory.resolvePath(greenScreenPrefs.photoShopPath);
+				
+				var nativeProcessInfo:NativeProcessStartupInfo=new NativeProcessStartupInfo();
+				nativeProcessInfo.executable=file;
+				nativeProcessInfo.arguments=new <String>[greenScreenPrefs.basePath + File.separator + "settings" + File.separator + "wrapup.jsx"];
+				
+				var process:NativeProcess=new NativeProcess();
+				process.start(nativeProcessInfo);
+			}
+			
+			protected function displayFinalPhoto(evt:WatchEvent):void 
+			{
+				TweenMax.delayedCall(1, displayFinalPhotoDelayed);
+			}
+			
+			protected function displayFinalPhotoDelayed():void
+			{
+				finalWatch.stopWatch();
+				var file : File = File.applicationDirectory.resolvePath(greenScreenPrefs.basePath + File.separator + "output" + File.separator + settings.userData.imageID + ".jpg");
+				currentState = "result";
+				cameraWindow.setResultImage("");
+				mainScreenResult.imageURL = "";
+				cameraWindow.setResultImage(file.url);
+				mainScreenResult.imageURL = file.url;
+			}
+			
+			protected function emptyCaptures():void 
+			{
+				if (greenScreenPrefs.basePath!=null)
+				{
+					var dir : File = File.applicationDirectory.resolvePath(greenScreenPrefs.basePath + File.separator + "captures");
+					dir.deleteDirectory(true);
+					dir.createDirectory();
+					
+					dir = File.applicationDirectory.resolvePath(greenScreenPrefs.basePath + File.separator + "tmp");
+					dir.deleteDirectory(true);
+					dir.createDirectory();
+					
+//					dir = File.applicationDirectory.resolvePath(greenScreenPrefs.basePath + File.separator + "output");
+//					dir.deleteDirectory(true);
+//					dir.createDirectory();
+				}
+			}
+			
+			protected function exit( e:Event = null ):void
+			{
+				tidy();
+			}
+			
+			// called when exiting from the component
+			protected function tidy(e:Event = null):void
+			{				
+				var dello:File=File.applicationDirectory.resolvePath(greenScreenPrefs.basePath + File.separator + "tmp" + File.separator + "lastpicture.jpg");
+				if(dello.exists) {
+					dello.deleteFile();
+				}
+				
+				finalWatch.removeEventListener(WatchEvent.ON_ADD_PHOTO, displayFinalPhoto);
+				finalWatch.stopWatch();
+				emptyCaptures();
+			}
+			
+			protected function uploadPhoto():void {
+				trace("uploading photo...");
+				
+				uploadFile = File.applicationDirectory.resolvePath(greenScreenPrefs.basePath + File.separator + "output" + File.separator + settings.userData.imageID + ".jpg");
+				if(uploadFile.exists) {
+					trace("*************** greenscreen file is here");
+				} else {
+					trace("No greenscreen file");
+				}
+				
+				uploadFile.addEventListener(Event.COMPLETE,uploadCompleteHandler);
+				uploadFile.addEventListener(Event.OPEN,openUploadHandler);
+				uploadFile.addEventListener(DataEvent.UPLOAD_COMPLETE_DATA,uploadDataComplete);
+				uploadFile.addEventListener(ProgressEvent.PROGRESS,updateProgress);
+				uploadFile.addEventListener(IOErrorEvent.IO_ERROR,onFileError);
+				uploadFile.upload(urlRequest);
+				this.parentApplication.dispatchEvent( new KioskProgressEvent(KioskProgressEvent.NOTIFY, "Uploading file" ) );
+				
+				
+				//
+			}
+			
+			protected function uploadDataComplete(event:DataEvent):Boolean
+			{
+				
+				try {
+					var result:XML = new XML(event.data);
+				} catch (e:Error) {
+					this.parentApplication.dispatchEvent( new KioskError(KioskError.ERROR, e.message+"\r\n"+event.data.toString(), "Malformed xml result" ) );
+					return false;
+				}
+				trace("result from upload:"+result.toString());
+				trace("message:"+result.message);
+				trace("status:"+result.status);
+				if(result.status!="OK") {
+					this.parentApplication.dispatchEvent( new KioskError(KioskError.ERROR, result.message, "Problem after file upload" ) );
+				} else {
+					currentState='thankyou';
+				}
+				return true;
+			}
+			protected function openUploadHandler(event:Event):void
+			{
+				trace("uploading");
+				//statusText.text = "Uploading...";
+			}
+			
+			protected function onFileError(error:IOErrorEvent) :void {
+				this.parentApplication.dispatchEvent( new KioskError(KioskError.ERROR, error.text.toString(), "I/O error while uploading the file" ) );
+				
+			}
+			protected function updateProgress(event:ProgressEvent):void {
+				var perc:Number=Math.round(event.bytesLoaded*100/event.bytesTotal);
+				this.parentApplication.dispatchEvent( new KioskProgressEvent(KioskProgressEvent.UPDATE, String(perc)+"% complete"));
+			}
+			
+			protected function uploadCompleteHandler(event:Event):void
+			{
+				this.parentApplication.dispatchEvent( new KioskProgressEvent( KioskProgressEvent.UPDATE_COMPLETE ));
+				
+				
+				
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:states>
+		<s:State name="instruction"/>
+		<s:State name="countdown" enterState="{cameraWindow.currentState='countdown'}"/>
+		<s:State name="wait" enterState="{cameraWindow.currentState='wait'}"/>
+		<s:State name="result" enterState="{cameraWindow.currentState='result'}"/>
+		<s:State name="thankyou" enterState="{cameraWindow.currentState='thankyou'}"/>
+	</s:states>
+	
+	<mainscreen:CameraMainScreenInstructionView nextScreen="{instructionContinueHandler(event)}" includeIn="instruction"/>
+	<mainscreen:CameraMainScreenCountdownView nextScreen="{currentState='wait'}" 
+											  tick="{updateCountdown(event)}" includeIn="countdown"/>
+	<mainscreen:CameraMainScreenWaitView includeIn="wait"/>
+	<mainscreen:CameraMainScreenResultView id="mainScreenResult" includeIn="result" retake="retakeHandler(event)" nextScreen="{uploadPhoto()}"/>
+	<mainscreen:CameraMainScreenThankyouView includeIn="thankyou" cameraComplete="cameraCompleteHandler(event)"/>
+</s:Group>
