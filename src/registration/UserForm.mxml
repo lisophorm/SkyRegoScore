@@ -43,6 +43,7 @@
 			public function init(event:Event=null):void
 			{
 				clearData();
+				clearForm();
 				settings = Settings.instance;
 				if (this.parentApplication.data!=null)
 				{
@@ -204,9 +205,9 @@
 		<s:layout>
 			<s:FormLayout/>
 		</s:layout>
-		<s:FormHeading id="frontMessage" label="PLEASE ENTER YOUR DETAILS" />
+		<s:FormHeading id="frontMessage" label="PLEASE ENTER YOUR DETAILS"  />
 		<s:Spacer height="30" />
-		<s:FormItem label="First Name:" skinClass="skins.BarclaysFormItem" >				
+		<s:FormItem label="First Name:" skinClass="skins.BarclaysFormItem">				
 			<s:TextInput id="userFirstName" width="512.95" autoCapitalize="word" fontSize="52" skinClass="skins.text.SkyTextInput" keyDown="keyHandler(event)"/>
 		</s:FormItem>
 		
@@ -214,26 +215,26 @@
 			<s:TextInput id="userLastName" width="512.95" autoCapitalize="word" fontSize="52" skinClass="skins.text.SkyTextInput" keyDown="keyHandler(event)"/>
 		</s:FormItem>
 		
-		<s:FormItem label="Email address:" skinClass="skins.BarclaysFormItem">
+		<s:FormItem label="Email:" skinClass="skins.BarclaysFormItem">
 			<s:TextInput id="userEmail" width="512.95" skinClass="skins.text.SkyTextInput" fontSize="52" keyDown="keyHandler(event)"/>
 		</s:FormItem>
 		
 		<s:Spacer height="30"/>
 		
-		<s:HGroup horizontalAlign="right" width="850">
+		<s:HGroup horizontalAlign="right" width="850"  verticalAlign="middle">
 			<s:Label verticalAlign="middle" fontSize="57" text="Are you a Sky customer?" /><s:Spacer width="15" />
 			<s:CheckBox id="premierLeagueCheck" styleName="tcaccept" fontSize="30" label="" skinClass="skins.buttons.SkyCheckbox" />
 		</s:HGroup>
 		
 		<s:Spacer height="20"/>
-		<s:HGroup horizontalAlign="right" width="850">
+		<s:HGroup horizontalAlign="right" width="850" verticalAlign="middle">
 			<s:Label verticalAlign="middle" fontSize="57" text="Are you a Sky Broadband customer" /><s:Spacer width="15" />
 			<s:CheckBox id="clubCheck" styleName="tcaccept" label="" skinClass="skins.buttons.SkyCheckbox" />
 		</s:HGroup>
 	
 		<s:Spacer height="30"/>
 		
-		<s:HGroup horizontalAlign="right" width="850">
+		<s:HGroup horizontalAlign="right" width="850" verticalAlign="middle">
 			<s:Label verticalAlign="middle" fontSize="57" text="I agree to the" />
 			<s:Button skinClass="skins.buttons.SkyRightButton" buttonMode="true" label="terms &amp; conditions" click="tandcd_clickHandler(event)" /><s:Spacer width="15" /><s:CheckBox id="termsCheck" label="" skinClass="skins.buttons.SkyCheckbox" />
 		</s:HGroup>

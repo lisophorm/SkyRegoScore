@@ -12,7 +12,7 @@ global
 	*/
 	fontFamily: "StandardRegularAllCase";
 }
-s|Label  {
+s|Label, s|RichEditableText  {
 	fontSize: 20;
 	fontFamily: "StandardRegularAllCase";	
 	color: #FFFFFF;
@@ -105,7 +105,7 @@ s|FormItem
 s|FormItem s|Label#labelDisplay {
 	color: #FFFFFF;
 	fontSize: 52;
-	paddingTop:20;
+	
 }
 #labelDisplay, .formItemLabelStyles {
 	fontSize: 52;
@@ -113,10 +113,25 @@ s|FormItem s|Label#labelDisplay {
 	color: #FFFFFF;
 	fontWeight: normal;
 	
+	
+	
 }
-s|FormItem s|Label#labelDisplay, s|RadioButton s|Label,
+s|FormItem
+ {
+	verticalAlign: "middle";
+	fontFamily: "StandardRegularAllCase";
+	
+	
+}
+s|FormItem s|Label#labelDisplay
+{
+	paddingRight: 20
+}
+ s|RadioButton s|Label, s|FormItem s|Label#labelDisplay
 {
 	fontFamily: "StandardRegularAllCase";
+
+	
 }
 
 s|VGroup.Game s|Label
