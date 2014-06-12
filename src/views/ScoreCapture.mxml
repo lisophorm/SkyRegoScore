@@ -44,6 +44,7 @@
 				gameId = this.parentApplication.ApplicationType=="SCOREGAME1"?1:2;
 				getPrefs.url=this.parentApplication.localURL+'/api/index.php/skytestlab/v1/preferences/';
 				getPrefs.send();
+				scoreValue.text = "";
 				//powerValue.reset();
 				//theUserName.text=settings.userData.firstName+" "+settings.userData.lastName;
 			}
