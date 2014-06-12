@@ -4,26 +4,26 @@
 
 @font-face
 {
-	src: url("../fonts/PremierLeague/sky-text-regular.ttf");
+	src: url("../fonts/sky-text-regular.ttf");
 	fontFamily: "StandardRegular";
 	embedAsCFF: true;
 }
 @font-face
 {
-	src: url("../fonts/ExpertSans/sky-text-regular.ttf");
+	src: url("../fonts/sky-text-regular.ttf");
 	fontFamily: "StandardRegularAllCase";
 	embedAsCFF: true;
 }
 @font-face
 {
-	src: url("/assets/fonts/ExpertSans/sky-text-bold.ttf");
+	src: url("/assets/fonts/sky-text-bold.ttf");
 	fontFamily: "/assets/StandardRegularAllCase";
 	fontWeight: bold;
 	embedAsCFF: true;
 }
 @font-face
 {
-	src: url("../fonts/ExpertSans/sky-text-bold.ttf");
+	src: url("../fonts/sky-text-bold.ttf");
 	fontFamily: "StandardRegularAllCase";
 	fontWeight: bold;
 	embedAsCFF: true;
