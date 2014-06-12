@@ -4,48 +4,38 @@
 
 @font-face
 {
-	src: url("../fonts/PremierLeague/PremierLeague.otf");
+	src: url("../fonts/PremierLeague/sky-text-regular.ttf");
 	fontFamily: "StandardRegular";
 	embedAsCFF: true;
 }
 @font-face
 {
-	src: url("../fonts/ExpertSans/ExpertSans-Light.ttf");
+	src: url("../fonts/ExpertSans/sky-text-regular.ttf");
 	fontFamily: "StandardRegularAllCase";
 	embedAsCFF: true;
 }
 @font-face
 {
-	src: url("/assets/fonts/ExpertSans/ExpertSans-Bold.ttf");
+	src: url("/assets/fonts/ExpertSans/sky-text-bold.ttf");
 	fontFamily: "/assets/StandardRegularAllCase";
 	fontWeight: bold;
 	embedAsCFF: true;
 }
 @font-face
 {
-	src: url("../fonts/ExpertSans/ExpertSans-Bold.ttf");
+	src: url("../fonts/ExpertSans/sky-text-bold.ttf");
 	fontFamily: "StandardRegularAllCase";
 	fontWeight: bold;
 	embedAsCFF: true;
 }
-@font-face
-{
-	src: url("../fonts/ExpertSans/ExpertSans-Bold.ttf");
-	fontFamily: "StandardRegularAllCaseBold";
-	embedAsCFF: true;
-}
+
 @font-face
 {
 	src: url("../fonts/sky-text-regular.ttf");
 	fontFamily: "StandardSans";
 	embedAsCFF: true;
 }
-@font-face
-{
-	src: url("../fonts/Digital/DS-DIGIB.ttf");
-	fontFamily: "Digital";
-	embedAsCFF: true;
-}
+
 @font-face
 {
 	src: url("../fonts/sky-text-regular.ttf");
@@ -64,17 +54,4 @@
 	src: url("../fonts/sky-text-bold.ttf");
 	fontFamily: StandardBold;
 	embedAsCFF: true;
-}
-
-@font-face
-{
-	src: url("../fonts/PremierLeague/PremierLeague.otf");
-	fontFamily: PremiereLeague;
-	embedAsCFF: true;
-}
-
-@font-face
-{
-	src:url("../fonts/ExpertSans/ExpertSans-Regular.ttf");
-	fontFamily:ExpertSans;
 }
