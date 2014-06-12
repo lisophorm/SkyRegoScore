@@ -80,6 +80,7 @@ package model
 		{
 			trace("save prefs");
 			if (prefsFile.exists) {
+				prefsXML.location_id=values.location_id;
 				prefsXML.aespassword = values.aespassword;
 				prefsXML.serverIP 		= values.serverIP;
 				prefsXML.facebookAppID  = values.facebookAppID;

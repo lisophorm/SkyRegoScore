@@ -35,8 +35,8 @@
 				parameters = new URLVariables();
 				
 				request = new URLRequest();
-				request.url =  this.parentApplication.localURL+'getuser.php';
-				request.method = URLRequestMethod.POST;
+				request.url =  this.parentApplication.localURL+"/api/index.php/skytestlab/v1/user/"+settings.userData.urn;
+				request.method = URLRequestMethod.GET;
 				
 				loader = new URLLoader();
 				loader.addEventListener(Event.COMPLETE, onLoadComplete);
@@ -54,14 +54,14 @@
 				trace("WelcomeBackView :: onLoadComplete :: " + loader.data);
 				
 				var result : Object = JSON.parse(loader.data);
+				trace( result );
 				
 				if(result["result"] == "OK")
 				{
-					settings.userData.firstName = result["firstname"];
-					settings.userData.lastName = result["lastname"];
-					settings.userData.teamID = int(result["team_id"])-1;
+					settings.userData.firstName = result.data["firstname"];
+					settings.userData.lastName = result.data["lastname"];
 					
-					welcomeBackUser.text = result["firstname"] + " " + result["lastname"];
+					welcomeBackUser.text = result.data["firstname"] + " " + result.data["lastname"];
 					TweenMax.to(welcomeBackUser, .3, {alpha : 1});
 				}
 			}

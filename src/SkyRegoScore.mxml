@@ -76,6 +76,8 @@
 			
 			public static var APPLICATION_TYPE_GREENSCREEN_CELEBRATE:String	 = "GREENSCREEN_CELEBRATE";
 			public static var APPLICATION_TYPE_SIMULATOR:String		 = "SIMULATOR";
+			public static var APPLICATION_TYPE_SCORE1 = "SCOREGAME1";
+			public static var APPLICATION_TYPE_SCORE2 = "SCOREGAME2";
 			public static var APPLICATION_TYPE_PITSTOP:String		 = "PITSTOP";
 			public static var APPLICATION_TYPE_HELMET:String 	     = "HELMET";
 			
@@ -93,6 +95,9 @@
 			
 			[Bindable]
 			public var registrationIncomplete:Boolean=false;
+			
+			[Bindable]
+			public var location_id:Number=0;
 			
 			[Bindable]
 			public var lastIncompleteURN:String="";
@@ -233,6 +238,7 @@
 				localURL= "http://"+pref.prefsXML..localIP+"/";
 				settings.localURL = localURL;
 				password ="123";
+				location_id=pref.prefsXML..location_id;
 				facebookAppID = pref.prefsXML..facebookAppID;
 				ApplicationType = pref.prefsXML..applicationtype.toString().toUpperCase();
 				
@@ -339,6 +345,7 @@
 				baseURL =  "http://"+pref.prefsXML..serverIP+"/";
 				localURL= "http://"+pref.prefsXML..localIP+"/";
 				eventLocation=pref.prefsXML..eventlocation;
+				location_id=pref.prefsXML..location_id;
 				facebookAppID = pref.prefsXML..facebookAppID;
 				ApplicationType = pref.prefsXML..applicationtype.toString().toUpperCase();
 				urn = int(pref.prefsXML..urnLength);
@@ -458,7 +465,7 @@
 			protected function gotoView( stackStr:String="", obj:Object=null ) :void
 			{
 				//Console.log("Main :: gotoView :: " + stackStr, this);
-				var indexSeq:Array = ["RegisterView", "SelectUserType", "FaceBookAuth01", "UserForm", "SelectTeam","CameraCapture", "ScoreCapture", "TaskCompleteCapture", "GreenScreen","GreenScreenCelebrate", "SelectApplication", "Thankyou", "FaceBookLogoutOverride", "WelcomeBack"]
+				var indexSeq:Array = ["RegisterView", "SelectUserType", "FaceBookAuth01", "UserForm", "CameraCapture", "ScoreCapture", "TaskCompleteCapture", "GreenScreen","GreenScreenCelebrate", "SelectApplication", "Thankyou", "FaceBookLogoutOverride", "WelcomeBack"]
 				var lastScreen:DisplayObject;
 				var nextScreen:DisplayObject;
 				var nextIndex:int=-1;
@@ -494,10 +501,7 @@
 						{
 							nextScreen = UserForm;
 						}
-						if (stackStr == "SelectTeam")
-						{
-							nextScreen = SelectTeam;
-						}
+
 						
 						if (stackStr == "CameraCapture")
 						{
@@ -639,23 +643,10 @@
 					
 					case ViewEvent.LOCATION_FACEBOOK_REGISTERED:
 						this.dispatchEvent( new UserEvent(UserEvent.REGISTERED, "facebook"));
-						this.dispatchEvent( new ViewEvent( ViewEvent.LOCATION_SELECT_TEAM ));
+						this.dispatchEvent( new ViewEvent( ViewEvent.LOCATION_FACEBOOK ));
 						break;
 					
-					case ViewEvent.LOCATION_SELECT_TEAM:
-						var data:Object = e.object;
-						if (data!=null)
-						{
-							data.urn = barcode;
-						} else {
-							data = {urn: barcode};
-						}
-						gotoView("SelectTeam",  data);
-						break;
-					
-					case ViewEvent.LOCATION_TEAM_SELECTED:
-						gotoView("Previous");
-						break;
+
 					
 					case ViewEvent.LOCATION_REGISTRATION_COMPLETE:
 						if (this.ApplicationType == APPLICATION_TYPE_REGISTRATION)
@@ -679,9 +670,9 @@
 								showError("USER NOT REGISTERED WITH FACEBOOK ACCOUNT", "FACEBOOK ACCOUNT REQUIRED", this.defaultView);
 							}
 							
-						} else if  (ApplicationType == APPLICATION_TYPE_PITSTOP || ApplicationType == APPLICATION_TYPE_SIMULATOR)
+						} else if  (ApplicationType == APPLICATION_TYPE_SCORE2 || ApplicationType == APPLICATION_TYPE_SCORE1)
 						{
-							gotoView("ScoreCapture", {urn: barcode, type: ApplicationTypeNumber, facebook: this.isFacebookRegistered, activityTitle: this.activityTitle, scoreFormat: this.scoreFormat});
+							gotoView("ScoreCapture", {applicationType:ApplicationType,urn: barcode, type: ApplicationTypeNumber, facebook: this.isFacebookRegistered, activityTitle: this.activityTitle, scoreFormat: this.scoreFormat});
 							
 						} else if  (ApplicationType == APPLICATION_TYPE_GREENSCREEN)
 						{
@@ -1100,11 +1091,10 @@
 		</s:backgroundFill>
 		<s:HGroup verticalAlign="middle" width="100%" height="150">
 			<s:HGroup left="20" paddingLeft="20">
-				<s:Button skinClass="skins.BasicButton" styleName="nav" icon="@Embed('assets/images/logo_live_small.png')" click="{defaultView()}"/>
+				<s:Button skinClass="skins.BasicButton" styleName="nav" icon="@Embed('assets/images/logo_small.png')" click="{defaultView()}"/>
 			</s:HGroup>
 			<s:HGroup width="100%" horizontalAlign="right" paddingRight="0" verticalAlign="middle" height="150">
 				<s:Button skinClass="skins.BasicButton" styleName="nav" icon="@Embed('assets/images/core/nm-no-connection.gif')" id="connStatus" label="{ML.t('NO CONNECTION')}" color="0xFFFFFF" visible="false" />
-				<s:Button skinClass="skins.BasicButton" styleName="nav" icon="@Embed('assets/images/core/home_logo.png')" click="{defaultView()}"/>
 				<s:Button label="camera" click="{gotoView('CameraCapture')}"/>
 				<s:Button skinClass="skins.BasicButton" styleName="nav" label="{ML.t('Quit')}" click="exitApplication(event)" id="quitButton" color="0xFFFFFF" visible="{loggedIn}" includeInLayout="{loggedIn}" />
 				<s:Button skinClass="skins.BasicButton" styleName="nav" icon="@Embed('assets/images/core/padlock.png')" click="config(event)" color="0xFFFFFF" />
@@ -1116,7 +1106,7 @@
 		
 		<s:Group id="holder" horizontalCenter="0" verticalCenter="0" width="100%" height="100%">
 			
-			<s:BorderContainer id="borderHolder" width="100%" height="100%" borderVisible="false" backgroundImage="@Embed('./assets/images/Background2.png')">
+			<s:BorderContainer id="borderHolder" width="100%" height="100%" borderVisible="false" backgroundImage="@Embed('./assets/images/Background.png')">
 				<!--s:Image includeInLayout="false" alpha="0.5" x="0" y="0" top="0" left="0" right="1280" bottom="720"  source="@Embed('../guides/Instructions_1280x720px_Page_01.jpg')" width="1280" height="720" smooth="true" /-->	
 				
 				<mx:ViewStack backgroundAlpha="0" id="Stack" height="100%" width="100%"  creationPolicy="all">
@@ -1131,9 +1121,6 @@
 					</mx:VBox>
 					<mx:VBox hideEffect="{hideFX}"  showEffect="{showFX}">
 						<registration:UserForm id="UserForm" />
-					</mx:VBox>
-					<mx:VBox hideEffect="{hideFX}"  showEffect="{showFX}">
-						<registration:SelectTeam id="SelectTeam" />
 					</mx:VBox>
 					<mx:VBox hideEffect="{hideFX}"  showEffect="{showFX}">
 						<mainscreen:CameraMainScreenWindow id="CameraCapture" />

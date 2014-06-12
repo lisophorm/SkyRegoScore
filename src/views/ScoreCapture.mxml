@@ -7,36 +7,43 @@
 	
 	<fx:Script>
 		<![CDATA[
-			import events.KioskError;
-			import events.KioskProgressEvent;
-			import events.ViewEvent;
-			
-			import model.Settings;
+			import com.utils.Console;
 			
 			import mx.events.FlexEvent;
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
 			
+			import events.KioskError;
+			import events.KioskProgressEvent;
+			import events.UserEvent;
+			import events.ViewEvent;
+			
+			import model.Settings;
+			
 			[Bindable]
 			private var settings:Settings;
+			
+			private var gameId:Number;
+			private var maxScore:Number;
 
 			public function created(event:FlexEvent=null):void
 			{
 				trace("scorecapture creationcomplete");
+				
 				this.addEventListener( Event.INIT, init);
 				powerValue.initialise("___._", "_");
-				accuracyValue.initialise("__._", "_");
-				controlValue.initialise("__:__._", "_");
+				
+
 			}
 
 			public function init(event:Event=null):void
 			{
 				trace("scorecapture init event");
 				settings = Settings.instance;
-				submitScore.url = this.parentApplication.localURL+'publishscore.php';
+				gameId = this.parentApplication.ApplicationType=="SCOREGAME1"?1:2;
+				getPrefs.url=this.parentApplication.localURL+'/api/index.php/skytestlab/v1/preferences/';
+				getPrefs.send();
 				powerValue.reset();
-				accuracyValue.reset();
-				controlValue.reset();
 				theUserName.text=settings.userData.firstName+" "+settings.userData.lastName;
 			}
 			
@@ -47,18 +54,18 @@
 			protected function submitHandler(event : MouseEvent, gameID : int, score : String) : void
 			{
 				var variables : Object = {};
-				if(score.indexOf("_")!=-1 && gameID==0) {
+				if(score.indexOf("_")!=-1) {
 					this.parentApplication.dispatchEvent(new KioskError(KioskError.ERROR, "Wrong score format.\r\nFormat is 999.9 - please do not leave any underscore sign", "ERROR"));
 	
-				} else if(score.indexOf("_")!=-1 && gameID==1) {
-					this.parentApplication.dispatchEvent(new KioskError(KioskError.ERROR, "Wrong score format.\r\nFormat is 99.9 - please do not leave any underscore sign", "ERROR"));
-					
-				} else if(score.indexOf("_")!=-1 && gameID==2) {
-					this.parentApplication.dispatchEvent(new KioskError(KioskError.ERROR, "Wrong score format.\r\nFormat is 99:99.9 - please do not leave any underscore sign", "ERROR"));
-					
+				} else if (parseInt(score)<0 || parseInt(score)>maxScore || parseInt(score)==NaN) {
+					this.parentApplication.dispatchEvent(new KioskError(KioskError.ERROR, "Score is a number and ranges from 0 to "+maxScore.toString(), "ERROR"));
+
 				} else if(score.length>0) {
+
 					variables.urn = settings.userData.urn;
-					variables.gameid = gameID;
+					variables.game_id = this.parentApplication.ApplicationType=="SCOREGAME1"?1:2;
+					variables.location_id=this.parentApplication.location_id;
+					submitScore.url=this.parentApplication.localURL+'/api/index.php/skytestlab/v1/score/';
 					variables.score = score;
 					submitScore.send(variables);
 					this.parentApplication.dispatchEvent( new KioskProgressEvent(KioskProgressEvent.NOTIFY, "SUBMITTING SCORE" ));
@@ -72,23 +79,50 @@
 				this.parentApplication.dispatchEvent(new KioskError(KioskError.ERROR, event.fault.faultString, "NETWORK ERROR"));
 			}
 			
-			protected function publishScoreResultHandler(event:ResultEvent):void
+			protected function publishScoreResultHandler(e:ResultEvent):void
 			{
-				if(submitScore.lastResult.result == "OK")
-				{
+				Console.log( e.result, this );
+				var result:Object = JSON.parse( e.result as String ) as Object;
+				Console.log( result, this);
+				if (result.result!="OK")
+				{					
+					
+					this.parentApplication.dispatchEvent(new KioskError(KioskError.ERROR, result.message, "COMMUNICATION ERROR"));
+					
+					
+					
+					
+				} else {
 					this.parentApplication.dispatchEvent( new ViewEvent( ViewEvent.LOCATION_GAME_COMPLETE ) );
-				}else
-				{
-					this.parentApplication.dispatchEvent(new KioskError(KioskError.ERROR, submitScore.lastResult.message, "ERROR"));
 				}
+				
+
+			}
+			
+			protected function getPrefs_resultHandler(e:ResultEvent):void
+			{
+				trace("getprefs result");
+				Console.log( e.result, this );
+				var result:Object = JSON.parse( e.result as String ) as Object;
+				Console.log( result, this);
+				maxScore=result.max_scores[gameId];
+				
+				
+			}
+			
+			protected function getPrefs_faultHandler(event:FaultEvent):void
+			{
+				trace("getprefs fault"+event.message.toString());
+				
 			}
 			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
-		<s:HTTPService id="submitScore" resultFormat="flashvars" method="POST" 
-					   url="{settings.localURL+'publishscore.php'}"  result="publishScoreResultHandler(event)" 
+		<s:HTTPService id="submitScore" resultFormat="text" method="POST" 
+					   result="publishScoreResultHandler(event)" 
 					   fault="httpServiceFaultHandler(event)"/>
+		<s:HTTPService id="getPrefs" resultFormat="text" method="GET" result="getPrefs_resultHandler(event)" fault="getPrefs_faultHandler(event)" url="{this.parentApplication.localURL+'/api/index.php/skytestlab/v1/preferences/'}" />
 	</fx:Declarations>
 	
 	<s:VGroup width="100%" horizontalAlign="center" verticalAlign="middle">
@@ -99,24 +133,14 @@
 					<s:layout>
 						<s:FormLayout gap="20" paddingLeft="40"/>
 					</s:layout>        
-					<s:FormItem label="POWER (KMPH)">
+					<s:FormItem label="POWER (KMPH)" id="scoreTypeLabel">
 						<s:HGroup gap="30">
 							<maskedinput:MaskedTextInputField id="powerValue" width="150"/>
 							<s:Button id="submitPowerButton" label="SUBMIT" click="submitHandler(event, 0, powerValue.numberInput.text)"/>
 						</s:HGroup>
 					</s:FormItem>
-					<s:FormItem label="ACCURACY (POINTS)">
-						<s:HGroup gap="30">
-							<maskedinput:MaskedTextInputField id="accuracyValue" width="150"/>
-							<s:Button id="submitAccuracyButton" label="SUBMIT" click="submitHandler(event, 1, accuracyValue.numberInput.text)"/>
-						</s:HGroup>
-					</s:FormItem>
-					<s:FormItem label="CONTROL (SECS)">
-						<s:HGroup gap="30">
-							<maskedinput:MaskedTextInputField id="controlValue" width="150"/>
-							<s:Button id="submitControlButton" label="SUBMIT" click="submitHandler(event, 2, controlValue.numberInput.text)"/>
-						</s:HGroup>
-					</s:FormItem>
+
+
 				</s:Form>
 			</s:VGroup>
 	</s:VGroup>

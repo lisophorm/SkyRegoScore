@@ -197,7 +197,14 @@
 			{			
 				currentState="USER_NOT_FOUND";
 				//register with device first
-				frontMessage.text = "WE CAN'T FIND YOU ON OUR SYSTEM, PLEASE SCAN YOUR\r\nTHUMB AGAIN IF YOU HAVE ALREADY REGISTERED\r\nOR PRESS THE BUTTON BELOW TO REGISTER";
+				if(this.parentApplication.ApplicationType=="REGISTRATION") {
+					frontMessage.text = "WE CAN'T FIND YOU ON OUR SYSTEM, PLEASE SCAN YOUR\r\nTHUMB AGAIN IF YOU HAVE ALREADY REGISTERED\r\nOR PRESS THE BUTTON BELOW TO REGISTER";
+					registerAgainBtn.visible=true;
+				} else {
+					registerAgainBtn.visible=false;
+					frontMessage.text = "WE CAN'T FIND YOU ON OUR SYSTEM, PLEASE SCAN YOUR\r\nTHUMB AGAIN IF YOU HAVE ALREADY REGISTERED\r\nOR GO TO ONE OF THE REGISTRATION POINTS";
+
+				}
 			}
 			
 			protected function networkError( e:RegistrationEvent=null ):void
@@ -326,7 +333,7 @@
 			{
 				this.parentApplication.dispatchEvent( new UserEvent(UserEvent.URN, uid) );
 				this.parentApplication.dispatchEvent( new UserEvent(UserEvent.REGISTERED) );
-				this.parentApplication.dispatchEvent(new ViewEvent(ViewEvent.LOCATION_SELECT_TEAM) );
+				this.parentApplication.dispatchEvent(new ViewEvent(ViewEvent.LOCATION_STANDARD_REGISTRATION) );
 			}
 			
 			protected function onAlreadyRegistered(URN:*, type:String):void
@@ -501,7 +508,7 @@
 			
 			<s:VGroup id="userNotFoundModule" paddingTop="75" horizontalAlign="center" includeIn="USER_NOT_FOUND">
 				
-				<s:Button label="TOUCH HERE TO REGISTER" width="{scanAgainBtn.width}" click="onBeginRegister(event)" skinClass="skins.barclaysButton" />
+				<s:Button label="TOUCH HERE TO REGISTER" width="{scanAgainBtn.width}" id="registerAgainBtn" click="onBeginRegister(event)" skinClass="skins.barclaysButton" />
 				<s:Spacer height="45" />
 				<s:Button label="TOUCH HERE TO SCAN AGAIN" click="init(event)" id="scanAgainBtn" skinClass="skins.barclaysButton" />
 				

@@ -41,7 +41,7 @@
 					this.localserver.text = data.xml.localIP;
 					this.urnLength.text = data.xml.urnLength;
 					this.scoreFormat.text = data.xml.scoreFormat;
-					this.photoshop.text = data.xml.photoshop;
+					this.locationID.text=data.xml.location_id;
 					this.calibrator.text = data.xml.calibrator;
 					this.radioGroup.selectedValue = data.xml.applicationtype;
 				}
@@ -61,7 +61,7 @@
 					urnLength: urnLength.text.toString(), 
 					applicationtype: radioGroup.selectedValue.toString(),
 					scoreFormat: scoreFormat.text.toString(),
-					photoshop: photoshop.text.toString(),
+					location_id: locationID.text.toString(),
 					calibrator: calibrator.text.toString()} ) );			
 			}
 			
@@ -121,8 +121,8 @@
 							<s:TextInput id="localserver" width="650" height="30" color="0x000000" fontFamily="Arial"/>
 						</s:FormItem>
 						
-						<s:FormItem width="365" label="Photoshop location:" fontFamily="Arial">				
-							<s:TextInput id="photoshop" width="650" height="30" color="0x000000" fontFamily="Arial"/>
+						<s:FormItem width="365" label="Location ID:" fontFamily="Arial">				
+							<s:TextInput id="locationID" width="650" height="30" color="0x000000" fontFamily="Arial"/>
 						</s:FormItem>
 						
 						<s:FormItem width="365" label="Calibrator location (watchfolder):" fontFamily="Arial">
@@ -150,8 +150,11 @@
 								
 									<s:RadioButton width="500" label="Registration Only" value="registration" group="{radioGroup}" skinClass="skins.vodafoneRadioButton" />
 									<s:RadioButton width="500" label="Photocapture" value="photocapture" group="{radioGroup}" skinClass="skins.vodafoneRadioButton" />
-									<s:RadioButton width="500" label="Simulator" value="simulator" group="{radioGroup}" skinClass="skins.vodafoneRadioButton" />
-									<!--<s:RadioButton width="500" label="Green screen - Sit In" value="greenscreen" group="{radioGroup}" skinClass="skins.vodafoneRadioButton" />
+									<!--s:RadioButton width="500" label="Simulator" value="simulator" group="{radioGroup}" skinClass="skins.vodafoneRadioButton" /-->
+									<s:RadioButton width="500" label="Score game 1" value="scoregame1" group="{radioGroup}" skinClass="skins.vodafoneRadioButton" />
+									<s:RadioButton width="500" label="Score game 2" value="scoregame2" group="{radioGroup}" skinClass="skins.vodafoneRadioButton" />
+
+								<!--<s:RadioButton width="500" label="Green screen - Sit In" value="greenscreen" group="{radioGroup}" skinClass="skins.vodafoneRadioButton" />
 									<s:RadioButton width="500" label="Green screen - Celebrate" value="greenscreen_celebrate" group="{radioGroup}" skinClass="skins.vodafoneRadioButton" />
 									<s:RadioButton width="500" label="Helmet" value="helmet" group="{radioGroup}" skinClass="skins.vodafoneRadioButton" />-->
 							</s:VGroup>

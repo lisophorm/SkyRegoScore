@@ -7,6 +7,14 @@
 	<fx:Script>
 		<![CDATA[
 			import com.alfo.utils.VirtualKeyboard;
+			import com.utils.Console;
+			
+			import mx.events.FlexEvent;
+			import mx.managers.PopUpManager;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			import mx.validators.Validator;
+			
 			
 			import events.KioskError;
 			import events.KioskEvent;
@@ -14,11 +22,6 @@
 			import events.ViewEvent;
 			
 			import model.Settings;
-			
-			import mx.events.FlexEvent;
-			import mx.rpc.events.FaultEvent;
-			import mx.rpc.events.ResultEvent;
-			import mx.validators.Validator;
 			
 			[Bindable]
 			protected var validatorArr:Array;
@@ -57,7 +60,7 @@
 				validatorArr.push(validateName);
 				validatorArr.push(validateSurname);
 				validatorArr.push(validateEmail);
-				saveData.url = (this.parentApplication).localURL+'register.php';
+				saveData.url = this.parentApplication.localURL+"/api/index.php/skytestlab/v1/user";
 			}
 			
 			protected function clearData():void
@@ -89,13 +92,12 @@
 					settings.userData.lastName = userLastName.text;
 					//send data
 					saveData.send({urn: settings.userData.urn, 
-
+						location_id:this.parentApplication.location_id,
 						firstname:userFirstName.text, 
 						lastname: userLastName.text, 
 						email: userEmail.text, 
-						optInTerms: termsCheck.selected ? 1 : 0, 
-						optInPremier: premierLeagueCheck.selected ? 1 : 0,
-						optInClub:premierLeagueCheck.selected ? 1 : 0
+						optin1: premierLeagueCheck.selected ? 1 : 0,
+						optin2: clubCheck.selected ? 1 : 0
 					});
 				//	save();
 				} 
@@ -116,10 +118,27 @@
 			
 			protected function save(e:ResultEvent=null):void
 			{
+				
+				Console.log( e.result, this );
+				var result:Object = JSON.parse( e.result as String ) as Object;
+				Console.log( result, this);
+				if (result.result!="OK")
+				{					
+					
+					this.parentApplication.dispatchEvent(new KioskError(KioskError.ERROR, result.message, "COMMUNICATION ERROR"));
+
+					
+				
+					
+				} else {
+					this.parentApplication.dispatchEvent( new UserEvent(UserEvent.REGISTERED, "classic"));
+					this.parentApplication.dispatchEvent( new ViewEvent( ViewEvent.LOCATION_REGISTRATION_COMPLETE, {type: "GAME" } ));
+				}
+				
 				trace("previous registration:"+this.parentApplication.registrationIncomplete);
 				this.parentApplication.registrationIncomplete=false;
 				// -> Do we need to send an isRegistered? We should divide Facebook and Direct registration perhaps
-				if(e.result)
+				/*if(e.result)
 				{
 					if (e.result.result=="OK")
 					{
@@ -134,7 +153,7 @@
 					this.parentApplication.dispatchEvent( new UserEvent(UserEvent.REGISTERED, "classic"));
 					this.parentApplication.dispatchEvent( new ViewEvent( ViewEvent.LOCATION_REGISTRATION_COMPLETE ) );
 					//this.parentApplication.dispatchEvent(new KioskError(KioskError.ERROR, "THE SERVER SENT AN EMPTY RESPONSE", "COMMUNICATION ERROR"));
-				}
+				}*/
 			}
 			
 			protected function error(e:FaultEvent):void
@@ -178,7 +197,7 @@
 						   property="text">
 		</mx:EmailValidator>
 
-		<s:HTTPService id="saveData" resultFormat="flashvars" method="POST" url="{(this.parentApplication).localURL+'register.php'}" result="save(event)" fault="error(event)" />
+		<s:HTTPService id="saveData" resultFormat="text" method="POST" url="{(this.parentApplication).localURL+'register.php'}" result="save(event)" fault="error(event)" />
 	</fx:Declarations>
 	
 	<s:Form width="100%" id="userform" horizontalCenter="105" verticalCenter="-10">
