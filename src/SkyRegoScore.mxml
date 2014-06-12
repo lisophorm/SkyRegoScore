@@ -1114,7 +1114,7 @@
 				
 				<mx:ViewStack backgroundAlpha="0" id="Stack" height="100%" width="100%"  creationPolicy="all">
 					<!--mx:VBox hideEffect="{hideFX}"  showEffect="{showFX}">
-						<registration:UserForm id="UserForm" />
+						<registration:UserForm id="UserForm2" />
 					</mx:VBox-->
 					
 					<mx:VBox hideEffect="{hideFX}"  showEffect="{showFX}">

@@ -196,7 +196,15 @@ mx|ViewStack mx|VBox
 	fontFamily: "StandardRegular";
 	typographicCase:uppercase;
 	fontSize: 180;
-	color: #00AEEF;
+	color: #FFFFFF;
+	lineHeight: 0px;
+}
+.username
+{
+	fontFamily: "StandardRegular";
+	typographicCase:uppercase;
+	fontSize: 120;
+	color: #FFFFFF;
 	lineHeight: 0px;
 }
 .tclink, .tcaccept#labelDisplay {
