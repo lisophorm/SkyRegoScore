@@ -202,7 +202,7 @@
         <s:State name="disabledWithPrompt" stateGroups="disabledStates"/>
     </s:states>
     
-	<local:SkyTextInputUpSkin />
+	<local:SkyTextInputUpSkin top="0" left="0" right="0" bottom="0" />
     
 
     
@@ -211,7 +211,7 @@
     <s:RichEditableText id="textDisplay" fontSize="52" color="#ffffff" 
               verticalAlign="middle" 
               widthInChars="10" paddingLeft="20" paddingRight="20"
-              left="100" right="100" top="1" bottom="1"  />
+              left="1" right="1" top="1" bottom="1" width="100%" />
     <!--- Defines the Label that is used for prompt text. The includeInLayout property is false so the prompt text does not affect measurement. -->
     <s:Label id="promptDisplay" maxDisplayedLines="1"
                 verticalAlign="middle"

@@ -89,10 +89,11 @@ s|FormHeading s|Label#labelDisplay {
 	fontFamily: "StandardRegularAllCase";
 	color: #FFFFFF;
 	fontWeight: normal;
+	
 }
 
 s|FormHeading#frontMessage s|Label#labelDisplay {
-	fontSize: 57;
+	fontSize: 52;
 	fontFamily: "StandardRegularAllCase";
 	color: #FFFFFF;
 	fontWeight: normal;
@@ -102,14 +103,16 @@ s|FormItem
 	skinClass: ClassReference("skins.BarclaysFormItem");	
 }
 s|FormItem s|Label#labelDisplay {
-	color: #00AEEF;
-	fontSize: 30;
+	color: #FFFFFF;
+	fontSize: 52;
+	paddingTop:20;
 }
 #labelDisplay, .formItemLabelStyles {
-	fontSize: 32;
+	fontSize: 52;
 	fontFamily: "StandardRegularAllCase";
 	color: #FFFFFF;
 	fontWeight: normal;
+	
 }
 s|FormItem s|Label#labelDisplay, s|RadioButton s|Label,
 {
@@ -197,12 +200,11 @@ mx|ViewStack mx|VBox
 	lineHeight: 0px;
 }
 .tclink, .tcaccept#labelDisplay {
-	fontSize: 28;
+	fontSize: 30;
 	fontFamily: "StandardRegularAllCase";
 }
 .tclink {
 	textDecoration: underline;
-	fontFamily: "StandardRegularAllCaseBold";
 }
 s|Label#welcomeBackUser{
 	fontSize:95;

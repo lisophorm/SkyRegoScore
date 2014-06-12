@@ -475,8 +475,11 @@
 		<s:State name="FINGERPRINT_CONNECTION_ERROR" />
 	</s:states>
 	
-	<s:VGroup id="welcomeScreen" horizontalAlign="center" includeIn="READY_TO_SCAN" width="1366">
-		<local:SkyPanelWelcome />
+	<s:VGroup id="welcomeScreen" verticalAlign="middle" horizontalAlign="center" includeIn="READY_TO_SCAN" width="1366" height="100%">
+		
+		<local:SkyPanelWelcome visible="{ this.parentApplication.ApplicationType=='REGISTRATION' }" includeInLayout="{ this.parentApplication.ApplicationType=='REGISTRATION' }" />
+		<local:SkyPanelWelcomeControl visible="{ this.parentApplication.ApplicationType=='SCOREGAME1' }" includeInLayout="{ this.parentApplication.ApplicationType=='SCOREGAME1' }" />
+		<local:SkyPanelWelcomeReaction visible="{ this.parentApplication.ApplicationType=='SCOREGAME2' }" includeInLayout="{ this.parentApplication.ApplicationType=='SCOREGAME2' }" />
 		
 		<!-- s:Label id="welcomeLabel" textAlign="center" width="90%" styleName="registrationOne" text="WELCOME TO{'\n'}BARCLAYS PREMIER LEAGUE LIVE">
 			<s:filters>
@@ -513,47 +516,47 @@
 			
 			<s:VGroup id="userNotFoundModule" paddingTop="75" horizontalAlign="center" includeIn="USER_NOT_FOUND">
 				
-				<s:Button label="TOUCH HERE TO REGISTER" width="{scanAgainBtn.width}" id="registerAgainBtn" click="onBeginRegister(event)" skinClass="skins.barclaysButton" />
+				<s:Button label="TOUCH HERE TO REGISTER"  width="{scanAgainBtn.width}" id="registerAgainBtn" click="onBeginRegister(event)" skinClass="skins.buttons.SkyRightButton" />
 				<s:Spacer height="45" />
-				<s:Button label="TOUCH HERE TO SCAN AGAIN" click="init(event)" id="scanAgainBtn" skinClass="skins.barclaysButton" />
+				<s:Button label="TOUCH HERE TO SCAN AGAIN" click="init(event)" id="scanAgainBtn" skinClass="skins.buttons.SkyRightButton" />
 				
 			</s:VGroup>
 			
 			<s:HGroup id="userFingerScanStepModule" paddingTop="105" height="250" includeIn="REGISTER_BEGIN, STEP1, STEP2, STEP3, REGISTER_COMPLETE">
 				<s:HGroup includeIn="REGISTER_BEGIN" >
-					<s:BitmapImage source="assets/images/fingerprint_gray.png" />
+					<s:BitmapImage source="assets/images/fingerprint_gray.png" smooth="true" />
 					<s:Spacer width="5" />
-					<s:BitmapImage source="assets/images/fingerprint_gray.png" />
+					<s:BitmapImage source="assets/images/fingerprint_gray.png" smooth="true" />
 					<s:Spacer width="5" />
-					<s:BitmapImage source="assets/images/fingerprint_gray.png" />
+					<s:BitmapImage source="assets/images/fingerprint_gray.png" smooth="true" />
 				</s:HGroup>
 				<s:HGroup includeIn="STEP1" >
-					<s:BitmapImage source="assets/images/fingerprint_orange.png" />
+					<s:BitmapImage source="assets/images/fingerprint_orange.png"  smooth="true"/>
 					<s:Spacer width="5" />
-					<s:BitmapImage source="assets/images/fingerprint_gray.png" />
+					<s:BitmapImage source="assets/images/fingerprint_gray.png" smooth="true" />
 					<s:Spacer width="5" />
-					<s:BitmapImage source="assets/images/fingerprint_gray.png" />
+					<s:BitmapImage source="assets/images/fingerprint_gray.png" smooth="true" />
 				</s:HGroup>
 				<s:HGroup includeIn="STEP2" >
-					<s:BitmapImage source="assets/images/fingerprint_blue.png" />
+					<s:BitmapImage source="assets/images/fingerprint_blue.png"  smooth="true"/>
 					<s:Spacer width="5" />
-					<s:BitmapImage source="assets/images/fingerprint_orange.png" />
+					<s:BitmapImage source="assets/images/fingerprint_orange.png" smooth="true" />
 					<s:Spacer width="5" />
-					<s:BitmapImage source="assets/images/fingerprint_gray.png" />
+					<s:BitmapImage source="assets/images/fingerprint_gray.png" smooth="true" />
 				</s:HGroup>
 				<s:HGroup includeIn="STEP3" >
-					<s:BitmapImage source="assets/images/fingerprint_blue.png" />
+					<s:BitmapImage source="assets/images/fingerprint_blue.png"  smooth="true"/>
 					<s:Spacer width="5" />
-					<s:BitmapImage source="assets/images/fingerprint_blue.png" />
+					<s:BitmapImage source="assets/images/fingerprint_blue.png"  smooth="true"/>
 					<s:Spacer width="5" />
-					<s:BitmapImage source="assets/images/fingerprint_orange.png" />
+					<s:BitmapImage source="assets/images/fingerprint_orange.png"  smooth="true"/>
 				</s:HGroup>
 				<s:HGroup includeIn="REGISTER_COMPLETE" >
-					<s:BitmapImage source="assets/images/fingerprint_orange.png" />
+					<s:BitmapImage source="assets/images/fingerprint_orange.png"  smooth="true"/>
 					<s:Spacer width="5" />
-					<s:BitmapImage source="assets/images/fingerprint_orange.png" />
+					<s:BitmapImage source="assets/images/fingerprint_orange.png"  smooth="true"/>
 					<s:Spacer width="5" />
-					<s:BitmapImage source="assets/images/fingerprint_orange.png" />
+					<s:BitmapImage source="assets/images/fingerprint_orange.png"  smooth="true"/>
 				</s:HGroup>
 			</s:HGroup>
 			

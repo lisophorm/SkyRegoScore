@@ -1113,6 +1113,10 @@
 				<!--s:Image includeInLayout="false" alpha="0.5" x="0" y="0" top="0" left="0" right="1280" bottom="720"  source="@Embed('../guides/Instructions_1280x720px_Page_01.jpg')" width="1280" height="720" smooth="true" /-->	
 				
 				<mx:ViewStack backgroundAlpha="0" id="Stack" height="100%" width="100%"  creationPolicy="all">
+					<!--mx:VBox hideEffect="{hideFX}"  showEffect="{showFX}">
+						<registration:UserForm id="UserForm" />
+					</mx:VBox-->
+					
 					<mx:VBox hideEffect="{hideFX}"  showEffect="{showFX}">
 						<registration:RegistrationScan id="RegisterView" debug="debugEventHandler(event)" />
 					</mx:VBox>
