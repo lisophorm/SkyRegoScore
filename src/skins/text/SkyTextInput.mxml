@@ -71,7 +71,6 @@
         override protected function commitProperties():void
         {
             super.commitProperties();
-            
             if (paddingChanged)
             {
                //updatePadding();

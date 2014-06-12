@@ -18,6 +18,13 @@ s|Label, s|RichEditableText  {
 	color: #FFFFFF;
 	
 }
+.errorTip { 
+	borderColor: #ffffff;
+	color: #ffffff;
+	fontFamily: "StandardRegularAllCase";
+	fontSize: 57;
+	fontWeight: normal;
+}
 s|Label#frontMessage  {
 	fontSize:57;
 	fontFamily: "StandardRegularAllCase";

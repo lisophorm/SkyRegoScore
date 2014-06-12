@@ -1090,13 +1090,13 @@
 				<s:GradientEntry color="0x000000" alpha="0"/>
 			</s:LinearGradient>
 		</s:backgroundFill>
-		<s:HGroup verticalAlign="middle" width="100%" height="150">
+		<s:HGroup verticalAlign="middle" width="100%" height="100">
 			<s:HGroup left="20" paddingLeft="20">
 			
 				<local:SkyLogo click="defaultView()" useHandCursor="true" mouseEnabled="true"/>
 				<!--s:Button skinClass="skins.BasicButton" styleName="nav" icon="@Embed('assets/images/logo_small.png')" click="{defaultView()}"/-->
 			</s:HGroup>
-			<s:HGroup width="100%" horizontalAlign="right" paddingRight="0" verticalAlign="middle" height="150">
+			<s:HGroup width="100%" horizontalAlign="right" paddingRight="0" verticalAlign="middle" height="100">
 				<s:Button skinClass="skins.BasicButton" styleName="nav" icon="@Embed('assets/images/core/nm-no-connection.gif')" id="connStatus" label="{ML.t('NO CONNECTION')}" color="0xFFFFFF" visible="false" />
 				<!--s:Button label="camera" click="{gotoView('CameraCapture')}"/-->
 				<s:Button skinClass="skins.BasicButton" styleName="nav" label="{ML.t('Quit')}" click="exitApplication(event)" id="quitButton" color="0xFFFFFF" visible="{loggedIn}" includeInLayout="{loggedIn}" />
