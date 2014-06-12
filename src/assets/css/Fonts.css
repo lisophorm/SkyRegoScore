@@ -16,8 +16,8 @@
 }
 @font-face
 {
-	src: url("/assets/fonts/sky-text-bold.ttf");
-	fontFamily: "/assets/StandardRegularAllCase";
+	src: url("../fonts/sky-text-bold.ttf");
+	fontFamily: "/StandardRegularAllCase";
 	fontWeight: bold;
 	embedAsCFF: true;
 }

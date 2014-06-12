@@ -1,5 +1,7 @@
 package registration
 {
+	import com.utils.Console;
+	
 	import flash.desktop.NativeProcess;
 	import flash.desktop.NativeProcessStartupInfo;
 	import flash.events.Event;
@@ -142,7 +144,7 @@ package registration
 			if (data!=null)
 			{
 				dispatchEvent(new DebugEvent(DebugEvent.DEBUG, data["code"]));
-				trace("Registration :: handleCode" + data["code"]);
+				Console.log("handleCode" + data["code"], this);
 				
 				//Console.log("handleCode:"+ data["code"]+ " "+data["msg"],this);
 				switch ( int(data["code"]) ) //'code' parameter is integer

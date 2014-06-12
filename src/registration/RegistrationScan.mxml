@@ -14,6 +14,7 @@
 			import com.alfo.utils.CleanWebView;
 			import com.alfo.utils.EncryptWrapper;
 			import com.alfo.utils.StringUtils;
+			import com.utils.Console;
 			
 			import flash.display.StageDisplayState;
 			import flash.events.Event;
@@ -60,7 +61,7 @@
 			public function created(event:FlexEvent=null):void
 			{
 				
-				trace("********** init of finger scan rego process");
+				Console.log("********** init of finger scan rego process", this);
 				
 				
 				
@@ -73,7 +74,7 @@
 			}
 			public function init(event:Event=null):void
 			{
-				trace("previous registration:"+this.parentApplication.registrationIncomplete);
+				Console.log("previous registration:"+this.parentApplication.registrationIncomplete, this);
 				this.currentState = "";
 				currentURN = null;
 				frontMessage.text = "PLEASE WAIT - INITIALISING SCANNER";
@@ -81,7 +82,9 @@
 				CleanWebView.wipeOut();
 				startListen();
 				this.executeBindings(true);
-				settings = Settings.instance;				
+				settings = Settings.instance;
+				onError("Sorry not working for me");
+				
 			}
 			//Prepare device for scanning
 			protected function startListen(event:Event=null):void
@@ -147,13 +150,13 @@
 				// this one is called when the user has successfully scanned their finger
 				// ignore on the whole, all the good stuff happens in userRegistered, which seems to be usually called at 
 				// the same time
-				trace("RegistrationScan :: register_complete");
+				Console.log("RegistrationScan :: register_complete", this);
 				this.currentState = "REGISTER_COMPLETE";
 			}
 			
 			protected function readyToScan( e:RegistrationEvent=null ):void
 			{
-				trace("RegistrationScan :: ready to scan");
+				Console.log("RegistrationScan :: ready to scan", this);
 				currentState="READY_TO_SCAN";
 				// if last registration wasn't finalized, delete fingerprint data
 				if(this.parentApplication.registrationIncomplete) {
@@ -166,7 +169,7 @@
 			
 			protected function userRegistered( e:RegistrationEvent = null ):void
 			{
-				trace("RegistrationScan :: userRegistered :: " + e.URN);
+				Console.log("RegistrationScan :: userRegistered :: " + e.URN,this);
 				//Console.log("userRegistered "+e.URN, this);
 				frontMessage.visible = true;
 				if(welcomeScreen)
@@ -352,6 +355,7 @@
 			}
 			protected function onError(msg:String,header:String="ERROR"):void
 			{
+				Console.log("Dispatching error", this );
 				this.parentApplication.dispatchEvent(new KioskError(KioskError.ERROR, "COMMUNICATION ERROR WITH THE FINGERPRINT SERVER:\r\nRETURNED:"+msg, "ERROR", init));
 				//init();
 			}

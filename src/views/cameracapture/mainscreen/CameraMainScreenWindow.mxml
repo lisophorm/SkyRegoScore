@@ -60,10 +60,15 @@
 				var file : File = File.desktopDirectory.resolvePath("calibrator/settings/appSettings.txt");
 				
 				loader = new URLLoader();
+				
 				loader.addEventListener(Event.COMPLETE, settingsLoadCompleteHandler);
+				loader.addEventListener(IOErrorEvent.IO_ERROR, settingLoadErrorHandler);
 				loader.load(new URLRequest(file.url));
 			}
-			
+			public function settingLoadErrorHandler(event : Event):void
+			{
+				trace("Error");	
+			}
 			public function settingsLoadCompleteHandler(event : Event):void
 			{
 				settings.cameraSettings = String(loader.data).split("|");

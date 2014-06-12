@@ -30,7 +30,7 @@
 	
 	<local:SkyRightButtonDownSkin includeIn="down, over" />
 	<local:SkyRightButtonUpSkin excludeFrom="down, over" />
-	<s:RichText id="labelDisplay" color="#ffffff" color.down="#0099FF" color.over="#0099FF" fontFamily="Sky" fontSize="37"
+	<s:RichText id="labelDisplay" color="#ffffff" color.down="#0099FF" color.over="#0099FF" fontSize="37"
 			 	kerning="on" tabStops="S0 S50 S100 S150" textAlign="center"
 				left.disabled="1" right.disabled="6" top.disabled="20" bottom.disabled="22"
 				left.down="0" right.down="0" top.down="20" bottom.down="0"
