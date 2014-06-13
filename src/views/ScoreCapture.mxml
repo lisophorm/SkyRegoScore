@@ -127,9 +127,9 @@
 		<s:HTTPService id="getPrefs" resultFormat="text" method="GET" result="getPrefs_resultHandler(event)" fault="getPrefs_faultHandler(event)" url="{this.parentApplication.localURL+'/api/index.php/skytestlab/v1/preferences/'}" />
 	</fx:Declarations>
 	
-	<s:VGroup width="100%" horizontalAlign="left" verticalAlign="middle">
+	<s:HGroup gap="0" horizontalAlign="left" verticalAlign="top">
 		<!--s:Label text="" styleName="registrationTwo" id="theUserName" width="100%" textAlign="center"/-->
-		<s:HGroup gap="20" verticalAlign="middle" rotation="90">
+		<s:HGroup gap="0" verticalAlign="middle" rotation="0">
 			<local:SkyIconBallControl visible="{ this.parentApplication.ApplicationType=='SCOREGAME1' }" includeInLayout="{ this.parentApplication.ApplicationType=='SCOREGAME1' }"/>
 			<local:SkyIconReactionControl visible="{ this.parentApplication.ApplicationType=='SCOREGAME2' }" includeInLayout="{ this.parentApplication.ApplicationType=='SCOREGAME2' }"/>
 		</s:HGroup>
@@ -155,6 +155,6 @@
 
 				</s:Form>
 			</s:VGroup>
-	</s:VGroup>
+	</s:HGroup>
 	
 </s:Group>
