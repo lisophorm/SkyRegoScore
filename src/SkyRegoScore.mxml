@@ -1077,7 +1077,13 @@
 			<mx:Move xFrom="{-Stack.width}"/>
 			
 		</s:Parallel>
-		
+			<s:GlowFilter id="glow" blurX="20" blurY="20" alpha="0.2" strength="20"  color="0xFFFFFF" />
+		<s:Animate id="glowAnimation" target="{glow}" duration="250">
+			<s:motionPaths>
+				<s:SimpleMotionPath valueFrom="0" valueTo="200" property="blurX"/>
+				<s:SimpleMotionPath valueFrom="0" valueTo="200" property="blurY"/>
+			</s:motionPaths>
+		</s:Animate>
 	</fx:Declarations>
 	
 	<fx:Style source="assets/css/Fonts.css" />
@@ -1093,7 +1099,7 @@
 		<s:HGroup verticalAlign="middle" width="100%" height="100">
 			<s:HGroup left="20" paddingLeft="20">
 			
-				<local:SkyLogo click="defaultView()" useHandCursor="true" mouseEnabled="true"/>
+				<local:SkyLogo click="defaultView()"  useHandCursor="true" mouseEnabled="true"/>
 				<!--s:Button skinClass="skins.BasicButton" styleName="nav" icon="@Embed('assets/images/logo_small.png')" click="{defaultView()}"/-->
 			</s:HGroup>
 			<s:HGroup width="100%" horizontalAlign="right" paddingRight="0" verticalAlign="middle" height="100">
@@ -1112,7 +1118,7 @@
 			<s:BorderContainer id="borderHolder" width="100%" height="100%" borderVisible="false" backgroundImage="@Embed('./assets/images/Background.png')">
 				<!--s:Image includeInLayout="false" alpha="0.5" x="0" y="0" top="0" left="0" right="1280" bottom="720"  source="@Embed('../guides/Instructions_1280x720px_Page_01.jpg')" width="1280" height="720" smooth="true" /-->	
 				
-				<mx:ViewStack backgroundAlpha="0" id="Stack" height="100%" width="100%"  creationPolicy="all">
+				<mx:ViewStack backgroundAlpha="0" id="Stack" height="100%" width="100%"  creationPolicy="all" filters="{[glow]}">
 					
 					
 					<mx:VBox hideEffect="{hideFX}"  showEffect="{showFX}">
