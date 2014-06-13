@@ -129,7 +129,7 @@
 	
 	<s:HGroup gap="0" horizontalAlign="left" verticalAlign="top">
 		<!--s:Label text="" styleName="registrationTwo" id="theUserName" width="100%" textAlign="center"/-->
-		<s:HGroup gap="0" verticalAlign="middle" rotation="0">
+		<s:HGroup gap="0" verticalAlign="middle" paddingRight="-20" paddingTop="15" rotation="0" horizontalAlign="right">
 			<local:SkyIconBallControl visible="{ this.parentApplication.ApplicationType=='SCOREGAME1' }" includeInLayout="{ this.parentApplication.ApplicationType=='SCOREGAME1' }"/>
 			<local:SkyIconReactionControl visible="{ this.parentApplication.ApplicationType=='SCOREGAME2' }" includeInLayout="{ this.parentApplication.ApplicationType=='SCOREGAME2' }"/>
 		</s:HGroup>
@@ -137,7 +137,7 @@
 		<s:VGroup>
 				<s:Form>
 					<s:layout>
-						<s:FormLayout gap="20" paddingLeft="40"/>
+						<s:FormLayout gap="0" paddingLeft="0"/>
 					</s:layout>        
 					<s:FormItem label="" id="scoreTypeLabel">
 						

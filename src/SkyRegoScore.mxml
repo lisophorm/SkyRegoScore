@@ -242,7 +242,7 @@
 				location_id=pref.prefsXML..location_id;
 				facebookAppID = pref.prefsXML..facebookAppID;
 				ApplicationType = pref.prefsXML..applicationtype.toString().toUpperCase();
-				
+//				ApplicationType = "SCOREGAME2"
 				urn = int(pref.prefsXML..urnLength);
 				scoreFormat = pref.prefsXML..scoreFormat;
 				
