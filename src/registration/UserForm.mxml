@@ -71,7 +71,7 @@
 				userEmail.text = ""; 
 				
 				termsCheck.selected = false;
-				opt_A.selected = opt_B.selected = opt_C.selected = true;
+				opt_A.selected = opt_B.selected = opt_C.selected = false;
 								
 			}
 			protected function exit(event:Event=null):void
@@ -113,7 +113,7 @@
 				userLastName.text="";
 				userLastName.errorString="";
 				termsCheck.selected = false;
-				opt_A.selected = opt_B.selected = opt_C.selected =true;
+				opt_A.selected = opt_B.selected = opt_C.selected =false;
 			}
 			
 			protected function save(e:ResultEvent=null):void
@@ -223,7 +223,7 @@
 		<s:Spacer height="30"/>
 		
 		<s:HGroup horizontalAlign="right" width="800"  verticalAlign="middle">
-			<s:Label verticalAlign="middle" fontSize="57" text="Are you a Sky customer?" /><s:Spacer width="15" />
+			<s:Label verticalAlign="middle" fontSize="57" text="Are you a Sky TV customer?" /><s:Spacer width="15" />
 			<s:CheckBox id="opt_A" styleName="tcaccept" fontSize="30" label="" skinClass="skins.buttons.SkyCheckbox" />
 		</s:HGroup>
 		

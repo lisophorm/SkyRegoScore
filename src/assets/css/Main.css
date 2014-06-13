@@ -288,3 +288,7 @@ s|Label#cameraFullMessageSecond{
 	fontFamily:"PremiereLeague";
 	color:#00AEEF;
 }
+s|TextArea s|RichEditableText {
+	color:#000000;
+
+}

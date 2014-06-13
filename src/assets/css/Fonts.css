@@ -11,6 +11,12 @@
 @font-face
 {
 	src: url("../fonts/sky-text-regular.ttf");
+	fontFamily: "StandardRegularNOCFF";
+	embedAsCFF: false;
+}
+@font-face
+{
+	src: url("../fonts/sky-text-regular.ttf");
 	fontFamily: "StandardRegularAllCase";
 	embedAsCFF: true;
 }

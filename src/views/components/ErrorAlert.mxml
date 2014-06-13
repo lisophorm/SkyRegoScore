@@ -38,6 +38,13 @@
 			{
 				return isremoving;
 			}
+			
+			protected function textarea1_addedToStageHandler(event:Event):void
+			{
+				trace("************ error textarea:"+errorTxt.name+" id:"+errorTxt.id);
+				
+			}
+			
 		]]>
 	</fx:Script>
 <fx:Metadata>
@@ -52,7 +59,7 @@
 		<s:VGroup width="100%" height="100%" paddingTop="20" paddingBottom="20" horizontalAlign="center" verticalAlign="middle">
 			<s:Spacer height="20" />
 			<s:Label x="81" y="124" color="#FFFFFF" fontSize="37" fontWeight="normal" text="{windowTitle}"/>
-			<s:TextArea x="58" y="79" width="484" height="140" color="0x000000" editable="false"
+			<s:TextArea addedToStage="textarea1_addedToStageHandler(event)" id="errorTxt" x="58" y="79" width="484" height="140" color="0x000000" editable="false"
 						fontSize="18" verticalAlign="middle" text="{message}" 
 						selectable="false" borderAlpha="0" />
 			<s:Button  label="CLOSE" click="PopUpManager.removePopUp(this);" skinClass="skins.buttons.SkyLeftButton" />
