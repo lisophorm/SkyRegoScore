@@ -71,8 +71,7 @@
 				userEmail.text = ""; 
 				
 				termsCheck.selected = false;
-				premierLeagueCheck.selected = true;
-				clubCheck.selected = true;
+				opt_A.selected = opt_B.selected = opt_C.selected = true;
 								
 			}
 			protected function exit(event:Event=null):void
@@ -97,8 +96,9 @@
 						firstname:userFirstName.text, 
 						lastname: userLastName.text, 
 						email: userEmail.text, 
-						optin1: premierLeagueCheck.selected ? 1 : 0,
-						optin2: clubCheck.selected ? 1 : 0
+						optin1: opt_A.selected ? 1 : 0,
+						optin2: opt_B.selected ? 1 : 0,
+						optin3: opt_C.selected ? 1 : 0
 					});
 				//	save();
 				} 
@@ -113,8 +113,7 @@
 				userLastName.text="";
 				userLastName.errorString="";
 				termsCheck.selected = false;
-				premierLeagueCheck.selected = true;
-				clubCheck.selected = true;
+				opt_A.selected = opt_B.selected = opt_C.selected =true;
 			}
 			
 			protected function save(e:ResultEvent=null):void
@@ -225,13 +224,18 @@
 		
 		<s:HGroup horizontalAlign="right" width="800"  verticalAlign="middle">
 			<s:Label verticalAlign="middle" fontSize="57" text="Are you a Sky customer?" /><s:Spacer width="15" />
-			<s:CheckBox id="premierLeagueCheck" styleName="tcaccept" fontSize="30" label="" skinClass="skins.buttons.SkyCheckbox" />
+			<s:CheckBox id="opt_A" styleName="tcaccept" fontSize="30" label="" skinClass="skins.buttons.SkyCheckbox" />
 		</s:HGroup>
 		
 		<s:Spacer height="20"/>
 		<s:HGroup horizontalAlign="right" width="800" verticalAlign="middle">
-			<s:Label verticalAlign="middle" fontSize="57" text="Are you a Sky Broadband customer" /><s:Spacer width="15" />
-			<s:CheckBox id="clubCheck" styleName="tcaccept" label="" skinClass="skins.buttons.SkyCheckbox" />
+			<s:Label verticalAlign="middle" fontSize="57" text="Are you a Sky Broadband customer?" /><s:Spacer width="15" />
+			<s:CheckBox id="opt_B" styleName="tcaccept" label="" skinClass="skins.buttons.SkyCheckbox" />
+		</s:HGroup>
+		<s:Spacer height="20"/>
+		<s:HGroup horizontalAlign="right" width="800" verticalAlign="middle">
+			<s:Label verticalAlign="middle" fontSize="57" text="Are you a Sky Sports customer?" /><s:Spacer width="15" />
+			<s:CheckBox id="opt_C" styleName="tcaccept" label="" skinClass="skins.buttons.SkyCheckbox" />
 		</s:HGroup>
 	
 		<s:Spacer height="30"/>
