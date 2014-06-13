@@ -163,7 +163,13 @@
     <!--- drop shadow can't be hittable so all other graphics go in this group -->
 	
     <s:Group left="0" right="0" top="0" bottom="0">
-		<local:SkyErrorPanel left="0" right="0" top="0" bottom="0"  />    
+		<!--- @copy spark.components.TitleWindow#closeButton -->
+		<s:Button id="closeButton" label="CLOSE"  skinClass="skins.buttons.SkyLeftButton" right="0" top="-80"/>
+		
+		<s:Label rotation="-90" id="titleDisplay" maxDisplayedLines="1"
+				  minHeight="30" bottom="0" left="-20"
+				 verticalAlign="middle" />
+		<local:SkyErrorPanel left="0" right="0" top="0" bottom="0" filters="{[dropShadow ]}"  />    
         <!--- top group mask @private-->
         <s:Group left="1" top="1" right="1" bottom="1" id="topGroupMask">
             <!--- @private-->
@@ -196,15 +202,11 @@
             <!--- @private -->
             <s:Group id="topGroup" mask="{topGroupMask}">
                 
-				<!--- @copy spark.components.TitleWindow#closeButton -->
-				<s:Button id="closeButton" skinClass="spark.skins.spark.TitleWindowCloseButtonSkin"
-						  width="15" height="15" left="30" top="5" />
+				
 				
                 <!-- layer 3: text -->
                 <!--- @copy spark.components.Panel#titleDisplay -->
-                <s:Label id="titleDisplay" maxDisplayedLines="1"
-                         left="9" right="36" top="10" bottom="0" minHeight="30"
-                         verticalAlign="middle" />
+                
                 
                 <!-- layer 4: moveArea -->
                 <!--- @copy spark.components.TitleWindow#moveArea -->

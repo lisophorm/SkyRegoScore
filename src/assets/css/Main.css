@@ -11,6 +11,11 @@ global
 	content-background-color: #FFFFFF;
 	*/
 	fontFamily: "StandardRegularAllCase";
+	
+	modalTransparency: 0.6;
+	modalTransparencyBlur: 1;
+	modalTransparencyColor: #051529;
+	modalTransparencyDuration: 100;
 }
 s|Label, s|RichEditableText  {
 	fontSize: 20;
@@ -37,9 +42,10 @@ s|Label#frontMessage  {
 	color: #FFFFFF;
 		
 }
+
 #titleDisplay 
 {
-	fontSize: 57;
+	fontSize: 37;
 	fontFamily: "StandardRegular";
 	color:#FFFFFF;
 	textAlign: center;
