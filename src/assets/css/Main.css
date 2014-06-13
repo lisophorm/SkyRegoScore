@@ -39,9 +39,9 @@ s|Label#frontMessage  {
 }
 #titleDisplay 
 {
-	fontSize: 43;
-	fontFamily: "StandardRegularAllCase";
-	color:#00AEEF;
+	fontSize: 57;
+	fontFamily: "StandardRegular";
+	color:#FFFFFF;
 	textAlign: center;
 }
 

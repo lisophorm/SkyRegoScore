@@ -180,6 +180,7 @@
 			
 		]]>
 	</fx:Script>
+		
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 		
@@ -197,6 +198,7 @@
 						   source="{userEmail}"
 						   property="text">
 		</mx:EmailValidator>
+		
 
 		<s:HTTPService id="saveData" resultFormat="text" method="POST" url="{(this.parentApplication).localURL+'register.php'}" result="save(event)" fault="error(event)" />
 	</fx:Declarations>
