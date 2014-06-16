@@ -1,7 +1,7 @@
 <s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
 					   xmlns:s="library://ns.adobe.com/flex/spark" 
 					   xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:views="views.*"
-					   horizontalCenter="center" width="100%" height="100%"
+					   horizontalCenter="center" width="1366" height="768"
 					   xmlns:local="*"
 					   creationComplete="init(event)"  resize="onresize()" backgroundColor="0x000000"
 					   addedToStage="fullscreen()" alwaysInFront="true" showStatusBar="false" xmlns:mainscreen="views.cameracapture.mainscreen.*" xmlns:components="views.components.*" xmlns:fingerprintscanner="fingerprintscanner.*" xmlns:registration="registration.*" xmlns:debug="registration.debug.*">
@@ -1118,7 +1118,7 @@
 			<s:BorderContainer id="borderHolder" width="100%" height="100%" borderVisible="false" backgroundImage="@Embed('./assets/images/Background.png')">
 				<!--s:Image includeInLayout="false" alpha="0.5" x="0" y="0" top="0" left="0" right="1280" bottom="720"  source="@Embed('../guides/Instructions_1280x720px_Page_01.jpg')" width="1280" height="720" smooth="true" /-->	
 				
-				<mx:ViewStack backgroundAlpha="0" id="Stack" height="100%" width="100%"  creationPolicy="all" filters="{[glow]}">
+				<mx:ViewStack backgroundAlpha="0" id="Stack" height="100%" width="100%"  creationPolicy="all" >
 					
 					
 					<mx:VBox hideEffect="{hideFX}"  showEffect="{showFX}">

@@ -523,7 +523,7 @@
 				
 			</s:VGroup>
 			
-			<s:HGroup id="userFingerScanStepModule" paddingTop="105" height="250" includeIn="REGISTER_BEGIN, STEP1, STEP2, STEP3, REGISTER_COMPLETE">
+			<s:HGroup id="userFingerScanStepModule" paddingTop="55" height="250" includeIn="REGISTER_BEGIN, STEP1, STEP2, STEP3, REGISTER_COMPLETE">
 				<s:HGroup includeIn="REGISTER_BEGIN" >
 					<s:BitmapImage source="assets/images/fingerprint_gray.png" smooth="true" />
 					<s:Spacer width="5" />
