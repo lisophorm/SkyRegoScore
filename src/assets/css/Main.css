@@ -30,6 +30,10 @@ s|Label, s|RichEditableText  {
 	fontSize: 57;
 	fontWeight: normal;
 }
+s|Label#frontMessage  {
+	fontSize:57;
+	fontFamily: "StandardRegularAllCase";
+}
 
 #photoList s|Label  {
 	fontSize: 24;
@@ -237,7 +241,11 @@ mx|ViewStack mx|VBox
 .tclink {
 	textDecoration: underline;
 }
-
+s|Label#welcomeBackUser{
+	fontSize:95;
+	fontFamily: "StandardRegularAllCase";
+	color:#00AEEF;
+}
 components1|CameraSelectionPanel{
 	fontSize:50;
 	fontFamily: "StandardRegularAllCase";
