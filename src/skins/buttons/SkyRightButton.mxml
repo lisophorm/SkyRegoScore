@@ -2,8 +2,9 @@
 <s:SparkButtonSkin xmlns:fx="http://ns.adobe.com/mxml/2009" 
 				   xmlns:s="library://ns.adobe.com/flex/spark" 
 				   xmlns:fb="http://ns.adobe.com/flashbuilder/2009"
+				   xmlns:mx="library://ns.adobe.com/flex/mx"
 				   minWidth="21" minHeight="21" 
-				   alpha.disabled="0.5" xmlns:local="*">
+				   alpha.disabled="0.5" xmlns:local="*" xmlns:plugins="com.greensock.plugins.*">
 	
 	<fx:Metadata>
 		<![CDATA[ 
@@ -16,12 +17,20 @@
 	
 	<fx:Script fb:purpose="styling">
 		<![CDATA[         
+			import com.greensock.TweenLite;
+			import com.greensock.plugins.GlowFilterPlugin;
+			import com.greensock.plugins.TweenPlugin;
+			TweenPlugin.activate([GlowFilterPlugin]);
 			
+			protected function create(event:Event):void
+			{
+				TweenLite.to(downbtn, 2, {glowFilter:{color:0xFFFFFF, blurX:10, blurY:10, strength:1, alpha:1, knockout: true}});
+			}
 		]]>        
 	</fx:Script>
 	<fx:Declarations>
-		<s:GlowFilter id="glow" blurX="20" blurY="20" alpha="0.5" knockout="true" strength="5" quality="3"  color="0xFFFFFF" />
-	</fx:Declarations>
+	</fx:Declarations>	
+	
 	<!-- states -->
 	<s:states>
 		<s:State name="up" />
@@ -30,11 +39,11 @@
 		<s:State name="disabled" />
 	</s:states>
 	
-	<local:SkyRightButtonDownSkin includeIn="down, over" top="0" left="0" right="0" bottom="0" />
-	<local:SkyRightButtonUpSkin excludeFrom="down, over"  top="0" left="0" right="0" bottom="0" />
-	<local:SkyRightButtonGlow  top="0" left="0" right="0" bottom="0" filters="{[glow]}" />
-	<s:RichText id="labelDisplay" color="#ffffff" color.down="#0099FF" filters="{[glow]}" color.over="#0099FF" fontSize="37"
-			 	kerning="on" tabStops="S0 S50 S100 S150" textAlign="center"
+	<local:SkyRightButtonDownSkin addedToStage="create(event)" includeIn="down, over" top="0" left="0" right="0" bottom="0" />
+	<local:SkyRightButtonUpSkin excludeFrom="down, over"   top="0" left="0" right="0" bottom="0" />
+	<local:SkyRightButtonGlow addedToStage="create(event)" id="downbtn" top="0" left="0" right="0" bottom="0" />
+	<s:RichText id="labelDisplay" color="#ffffff" color.down="#0099FF" color.over="#0099FF" fontSize="37"
+				kerning="on" tabStops="S0 S50 S100 S150" textAlign="center"
 				top.disabled="20" bottom.disabled="22" left="20" right="20" paddingLeft="20" paddingRight="20"
 				top.down="20" bottom.down="0"
 				top.over="20" bottom.over="0"

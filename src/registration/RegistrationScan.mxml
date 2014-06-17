@@ -8,7 +8,9 @@
 	<fx:Metadata>
 		[Event(name="debug", type="registration.debug.DebugEvent")]
 	</fx:Metadata>
-	
+	<fx:Declarations>
+		<s:GlowFilter id="glow" blurX="20" blurY="20" alpha="0.5" strength="5" quality="3"  color="0xFFFFFF" />
+	</fx:Declarations>
 	<fx:Script>
 		<![CDATA[
 			import com.alfo.utils.CleanWebView;
@@ -526,38 +528,38 @@
 			<s:HGroup id="userFingerScanStepModule" paddingTop="55" height="250" includeIn="REGISTER_BEGIN, STEP1, STEP2, STEP3, REGISTER_COMPLETE">
 				<s:HGroup includeIn="REGISTER_BEGIN" >
 					<s:BitmapImage source="assets/images/fingerprint_gray.png" smooth="true" />
-					<s:Spacer width="5" />
+					<s:Spacer width="15" />
 					<s:BitmapImage source="assets/images/fingerprint_gray.png" smooth="true" />
-					<s:Spacer width="5" />
+					<s:Spacer width="15" />
 					<s:BitmapImage source="assets/images/fingerprint_gray.png" smooth="true" />
 				</s:HGroup>
 				<s:HGroup includeIn="STEP1" >
-					<s:BitmapImage source="assets/images/fingerprint_orange.png"  smooth="true"/>
-					<s:Spacer width="5" />
+					<s:BitmapImage source="assets/images/fingerprint_orange.png" smooth="true"/>
+					<s:Spacer width="15" />
 					<s:BitmapImage source="assets/images/fingerprint_gray.png" smooth="true" />
-					<s:Spacer width="5" />
+					<s:Spacer width="15" />
 					<s:BitmapImage source="assets/images/fingerprint_gray.png" smooth="true" />
 				</s:HGroup>
 				<s:HGroup includeIn="STEP2" >
-					<s:BitmapImage source="assets/images/fingerprint_blue.png"  smooth="true"/>
-					<s:Spacer width="5" />
+					<s:BitmapImage source="assets/images/fingerprint_blue.png" smooth="true"/>
+					<s:Spacer width="15" />
 					<s:BitmapImage source="assets/images/fingerprint_orange.png" smooth="true" />
-					<s:Spacer width="5" />
+					<s:Spacer width="15" />
 					<s:BitmapImage source="assets/images/fingerprint_gray.png" smooth="true" />
 				</s:HGroup>
 				<s:HGroup includeIn="STEP3" >
-					<s:BitmapImage source="assets/images/fingerprint_blue.png"  smooth="true"/>
-					<s:Spacer width="5" />
-					<s:BitmapImage source="assets/images/fingerprint_blue.png"  smooth="true"/>
-					<s:Spacer width="5" />
-					<s:BitmapImage source="assets/images/fingerprint_orange.png"  smooth="true"/>
+					<s:BitmapImage source="assets/images/fingerprint_blue.png" smooth="true"/>
+					<s:Spacer width="15" />
+					<s:BitmapImage source="assets/images/fingerprint_blue.png" smooth="true"/>
+					<s:Spacer width="15" />
+					<s:BitmapImage source="assets/images/fingerprint_orange.png" smooth="true"/>
 				</s:HGroup>
 				<s:HGroup includeIn="REGISTER_COMPLETE" >
-					<s:BitmapImage source="assets/images/fingerprint_orange.png"  smooth="true"/>
-					<s:Spacer width="5" />
-					<s:BitmapImage source="assets/images/fingerprint_orange.png"  smooth="true"/>
-					<s:Spacer width="5" />
-					<s:BitmapImage source="assets/images/fingerprint_orange.png"  smooth="true"/>
+					<s:BitmapImage source="assets/images/fingerprint_orange.png" smooth="true"/>
+					<s:Spacer width="15" />
+					<s:BitmapImage source="assets/images/fingerprint_orange.png" smooth="true"/>
+					<s:Spacer width="15" />
+					<s:BitmapImage source="assets/images/fingerprint_orange.png" smooth="true"/>
 				</s:HGroup>
 			</s:HGroup>
 			

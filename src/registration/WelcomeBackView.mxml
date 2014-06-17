@@ -81,6 +81,6 @@
 		<s:Spacer width="10" height="30"/>
 		<s:Label textAlign="center" styleName="thankyou" id="frontMessage" text="WELCOME BACK"  />
 		<s:Spacer width="10" height="20"/>
-		<s:Label id="welcomeBackUser" />
+		<s:Label id="welcomeBackUser" styleName="username" />
 	</s:VGroup>
 </s:Group>
