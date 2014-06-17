@@ -1077,7 +1077,7 @@
 			<mx:Move xFrom="{-Stack.width}"/>
 			
 		</s:Parallel>
-			<s:GlowFilter id="glow" blurX="20" blurY="20" alpha="0.2" strength="20"  color="0xFFFFFF" />
+			<s:GlowFilter id="glow" blurX="20" blurY="20" alpha="0.5" strength="20" quality="3"  color="0xFFFFFF" />
 		<s:Animate id="glowAnimation" target="{glow}" duration="250">
 			<s:motionPaths>
 				<s:SimpleMotionPath valueFrom="0" valueTo="200" property="blurX"/>

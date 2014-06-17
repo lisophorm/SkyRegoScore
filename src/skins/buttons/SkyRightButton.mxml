@@ -19,7 +19,9 @@
 			
 		]]>        
 	</fx:Script>
-	
+	<fx:Declarations>
+		<s:GlowFilter id="glow" blurX="20" blurY="20" alpha="0.5" knockout="true" strength="5" quality="3"  color="0xFFFFFF" />
+	</fx:Declarations>
 	<!-- states -->
 	<s:states>
 		<s:State name="up" />
@@ -30,7 +32,8 @@
 	
 	<local:SkyRightButtonDownSkin includeIn="down, over" top="0" left="0" right="0" bottom="0" />
 	<local:SkyRightButtonUpSkin excludeFrom="down, over"  top="0" left="0" right="0" bottom="0" />
-	<s:RichText id="labelDisplay" color="#ffffff" color.down="#0099FF" color.over="#0099FF" fontSize="37"
+	<local:SkyRightButtonGlow  top="0" left="0" right="0" bottom="0" filters="{[glow]}" />
+	<s:RichText id="labelDisplay" color="#ffffff" color.down="#0099FF" filters="{[glow]}" color.over="#0099FF" fontSize="37"
 			 	kerning="on" tabStops="S0 S50 S100 S150" textAlign="center"
 				top.disabled="20" bottom.disabled="22" left="20" right="20" paddingLeft="20" paddingRight="20"
 				top.down="20" bottom.down="0"
