@@ -500,16 +500,16 @@
 		
 		<s:Spacer height="130" height.DEFAULT="260" />
 		<s:VGroup horizontalAlign="center">
-			
-			<s:Label id="frontMessage" horizontalCenter="0" textAlign="center"
-					 text="PLEASE SCAN YOUR THUMB 3 TIMES"
-					 text.REGISTER_BEGIN = "PLEASE WAIT"
+
+			<components:SkyLabel id="frontMessage" horizontalCenter="0" textAlign="center"
+					 text="Please scan your thumb 3 times"
+					 text.REGISTER_BEGIN = "Please Wait"
 					 text.FINGERPRINT_CONNECTION_ERROR="NETWORK ERROR 500 PLEASE ASK HELP TO A MEMBER OF STAFF"
-					 text.SCANNING_RESTART = "READING ERROR - PLEASE TRY AGAIN!"
-					 text.STEP1="PLEASE SCAN YOUR THUMB 3 TIMES"
-					 text.STEP2="PLEASE SCAN YOUR THUMB 3 TIMES"
-					 text.STEP3="PLEASE SCAN YOUR THUMB 3 TIMES"
-					 text.REGISTER_COMPLETE="SCANNING SUCCESSFUL"
+					 text.SCANNING_RESTART = "Reading error - Please try again!"
+					 text.STEP1="Please scan your thumb 3 times"
+					 text.STEP2="Please scan your thumb 3 times"
+					 text.STEP3="Please scan your thumb 3 times"
+					 text.REGISTER_COMPLETE="Scanning successful"
 					 visible.READY_TO_SCAN="false" excludeFrom="USER_NOT_FOUND"/>
 			
 			<s:TextInput id="barcodeWriter" top="-50" addedToStage="getBarcodeFocus()" alpha="0" includeInLayout="false" visible="false" text="" textAlign="left" softKeyboardActivating="urn_softKeyboardActivatingHandler(event)"/>
@@ -519,46 +519,46 @@
 			<s:VGroup id="userNotFoundModule" paddingTop="-150" horizontalAlign="center" includeIn="USER_NOT_FOUND">
 				<local:SkyPanelNoMatch />
 				<s:Spacer height="45" />
-				<s:Button label="TOUCH HERE TO SCAN AGAIN" click="init(event)" id="scanAgainBtn" skinClass="skins.buttons.SkyRightButton" />
+				<s:Button label="Touch Here To Scan Again" click="init(event)" id="scanAgainBtn" skinClass="skins.buttons.SkyRightButton" />
 				<s:Spacer height="45" />
-				<s:Button label="TOUCH HERE TO REGISTER" visible="{ this.parentApplication.ApplicationType=='REGISTRATION' }" includeInLayout="{ this.parentApplication.ApplicationType=='REGISTRATION' }"  width="{scanAgainBtn.width}" id="registerAgainBtn" click="onBeginRegister(event)" skinClass="skins.buttons.SkyRightButton" />
+				<s:Button label="Touch Here To Register" visible="{ this.parentApplication.ApplicationType=='REGISTRATION' }" includeInLayout="{ this.parentApplication.ApplicationType=='REGISTRATION' }"  width="{scanAgainBtn.width}" id="registerAgainBtn" click="onBeginRegister(event)" skinClass="skins.buttons.SkyRightButton" />
 				
 			</s:VGroup>
 			
-			<s:HGroup id="userFingerScanStepModule" paddingTop="55" height="250" includeIn="REGISTER_BEGIN, STEP1, STEP2, STEP3, REGISTER_COMPLETE">
+			<s:HGroup id="userFingerScanStepModule" paddingTop="10" height="250" includeIn="REGISTER_BEGIN, STEP1, STEP2, STEP3, REGISTER_COMPLETE">
 				<s:HGroup includeIn="REGISTER_BEGIN" >
 					<s:BitmapImage source="assets/images/fingerprint_gray.png" smooth="true" />
-					<s:Spacer width="15" />
+					<s:Spacer width="1" />
 					<s:BitmapImage source="assets/images/fingerprint_gray.png" smooth="true" />
-					<s:Spacer width="15" />
+					<s:Spacer width="1" />
 					<s:BitmapImage source="assets/images/fingerprint_gray.png" smooth="true" />
 				</s:HGroup>
 				<s:HGroup includeIn="STEP1" >
 					<s:BitmapImage source="assets/images/fingerprint_orange.png" smooth="true"/>
-					<s:Spacer width="15" />
+					<s:Spacer width="1" />
 					<s:BitmapImage source="assets/images/fingerprint_gray.png" smooth="true" />
-					<s:Spacer width="15" />
+					<s:Spacer width="1" />
 					<s:BitmapImage source="assets/images/fingerprint_gray.png" smooth="true" />
 				</s:HGroup>
 				<s:HGroup includeIn="STEP2" >
 					<s:BitmapImage source="assets/images/fingerprint_blue.png" smooth="true"/>
-					<s:Spacer width="15" />
+					<s:Spacer width="1" />
 					<s:BitmapImage source="assets/images/fingerprint_orange.png" smooth="true" />
-					<s:Spacer width="15" />
+					<s:Spacer width="1" />
 					<s:BitmapImage source="assets/images/fingerprint_gray.png" smooth="true" />
 				</s:HGroup>
 				<s:HGroup includeIn="STEP3" >
 					<s:BitmapImage source="assets/images/fingerprint_blue.png" smooth="true"/>
-					<s:Spacer width="15" />
+					<s:Spacer width="1" />
 					<s:BitmapImage source="assets/images/fingerprint_blue.png" smooth="true"/>
-					<s:Spacer width="15" />
+					<s:Spacer width="1" />
 					<s:BitmapImage source="assets/images/fingerprint_orange.png" smooth="true"/>
 				</s:HGroup>
 				<s:HGroup includeIn="REGISTER_COMPLETE" >
 					<s:BitmapImage source="assets/images/fingerprint_orange.png" smooth="true"/>
-					<s:Spacer width="15" />
+					<s:Spacer width="1" />
 					<s:BitmapImage source="assets/images/fingerprint_orange.png" smooth="true"/>
-					<s:Spacer width="15" />
+					<s:Spacer width="1" />
 					<s:BitmapImage source="assets/images/fingerprint_orange.png" smooth="true"/>
 				</s:HGroup>
 			</s:HGroup>
