@@ -210,7 +210,14 @@
 				var p:Point = parent.globalToLocal(focus.parent.localToGlobal(new Point(focus.x, focus.y)));
 				o.x = (stage.width - width) * .5;
 				//
-				o.y = (p.y+focus.height );
+				if(focus.name=="thePassword") {
+					o.y = (p.y+focus.height + 150);
+				} else if(focus.name=="theScore") {
+					o.y = (p.y+(focus.height/2) );
+				} else {
+					o.y = (p.y+focus.height );
+				}
+				
 			}
 			trace("focusing"+focus.name);
 			TweenMax.to(this, .5, o);

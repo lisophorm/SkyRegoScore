@@ -119,6 +119,12 @@
 				
 			}
 			
+			protected function scoreValue_addedToStageHandler(event:Event):void
+			{
+				scoreValue.name="theScore";
+				
+			}
+			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
@@ -147,7 +153,7 @@
 						
 						<s:HGroup gap="-5">
 							<!--maskedinput:MaskedTextInputField id="powerValue" width="150"/-->
-							<s:TextInput skinClass="skins.text.SkyTextInputLarge" width="487.1" id="scoreValue"  />
+							<s:TextInput skinClass="skins.text.SkyTextInputLarge" width="487.1" addedToStage="scoreValue_addedToStageHandler(event)" id="scoreValue"  />
 							<s:VGroup x="-5">
 								<s:Spacer height="380" />
 								<s:Button id="submitPowerButton" skinClass="skins.buttons.SkyRightButton" label="SAVE" click="submitHandler(event, 0, scoreValue.text)"/>	

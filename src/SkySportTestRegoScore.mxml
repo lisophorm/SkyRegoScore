@@ -311,6 +311,9 @@
 				configureInputField(UserForm.userLastName);
 				configureInputField(UserForm.userEmail);
 				configureInputField(ScoreCapture.scoreValue);
+				configureInputField(SelectApplication.server);
+				configureInputField(SelectApplication.localserver);
+				configureInputField(SelectApplication.locationID);
 				//englishKeyboard.show();
 				//englishKeyboard.focus=userFirstName;
 				englishKeyboard.alpha=0;
