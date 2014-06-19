@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx"  xmlns:local="*" addedToStage="group1_addedToStageHandler(event)"> 
+	
+	<fx:Script>
+		<![CDATA[
+			import com.greensock.TweenLite;
+			import com.greensock.plugins.GlowFilterPlugin;
+			import com.greensock.plugins.TweenPlugin;
+			TweenPlugin.activate([GlowFilterPlugin]);
+			
+			[Bindable]
+			public var text:String="";
+			
+			protected function create(event:Event):void
+			{
+				TweenLite.to(labelFrame, 2, {glowFilter:{color:0xFFFFFF, blurX:10, blurY:10, strength:1, alpha:1, knockout: true}});
+			}
+			
+			protected function group1_addedToStageHandler(event:Event):void
+			{
+				// TODO Auto-generated method stub
+				
+			}
+		]]>
+    
+
+	</fx:Script>
+	
+	<local:SkyTextLabelGlow addedToStage="create(event)" id="labelFrame" top="0" left="0" right="0" bottom="0" />
+	<local:SkyTextLabel top="0" left="0" right="0" bottom="0" />
+	<s:Label text="{text}" textAlign="center" fontFamily="StandardRegularAllCase" fontWeight="bold" fontSize="57" top="60" left="50" right="60" bottom="50" />
+</s:Group>

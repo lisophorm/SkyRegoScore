@@ -4,16 +4,19 @@
 					   horizontalCenter="center" width="1366" height="768"
 					   xmlns:local="*"
 					   creationComplete="init(event)"  resize="onresize()" backgroundColor="0x000000"
-					   addedToStage="fullscreen()" alwaysInFront="true" showStatusBar="false" xmlns:mainscreen="views.cameracapture.mainscreen.*" xmlns:components="views.components.*" xmlns:fingerprintscanner="fingerprintscanner.*" xmlns:registration="registration.*" xmlns:debug="registration.debug.*">
+					   addedToStage="fullscreen()" alwaysInFront="false" showStatusBar="false" xmlns:mainscreen="views.cameracapture.mainscreen.*" xmlns:components="views.components.*" xmlns:fingerprintscanner="fingerprintscanner.*" xmlns:registration="registration.*" xmlns:debug="registration.debug.*">
 	<fx:Script>
 		<![CDATA[
 			import com.greensock.TweenMax;
 			import com.utils.Console;
 			
+			import flash.events.ErrorEvent;
+			
 			import mx.controls.Alert;
 			import mx.events.FlexEvent;
 			import mx.managers.PopUpManager;
 			
+			import spark.components.TextInput;
 			import spark.filters.DropShadowFilter;
 			
 			import air.update.ApplicationUpdaterUI;
@@ -126,6 +129,11 @@
 			
 			private var appUpdater:ApplicationUpdaterUI = new ApplicationUpdaterUI();
 			
+			protected var keyboardRequest:URLRequest;
+			protected var keyboardLoader:URLLoader = new URLLoader();
+			
+			import uk.co.huydinh.app.champion.keyboard.OnScreenKeyboard;
+			public var englishKeyboard:OnScreenKeyboard = new OnScreenKeyboard();
 			
 			
 			protected function fullscreen(e:Event=null):void
@@ -208,12 +216,14 @@
 			{
 				//	trace(File.applicationDirectory.nativePath);
 				
-				
+				keyboardRequest = new URLRequest("assets/xml/english.kb.xml");
+				keyboardLoader.addEventListener(Event.COMPLETE, onKeyboardLoad);
+				keyboardLoader.load(keyboardRequest);
 				
 				
 				if(Updater.isSupported) {
 					trace("checking update")
-					//checkUpdate();
+					checkUpdate();
 				} else {
 					trace("update not supported");
 				}
@@ -242,7 +252,7 @@
 				location_id=pref.prefsXML..location_id;
 				facebookAppID = pref.prefsXML..facebookAppID;
 				ApplicationType = pref.prefsXML..applicationtype.toString().toUpperCase();
-//				ApplicationType = "SCOREGAME2"
+				//				ApplicationType = "SCOREGAME2"
 				urn = int(pref.prefsXML..urnLength);
 				scoreFormat = pref.prefsXML..scoreFormat;
 				
@@ -290,7 +300,44 @@
 				
 				//				contentholder.addEventListener(KeyboardEvent.KEY_DOWN, typingHandler);fddsffdsa
 				
-//				debugPanel.registrationModule = RegisterView.device;
+				//				debugPanel.registrationModule = RegisterView.device;
+			}
+			
+			protected function onKeyboardLoad(Event):void
+			{
+				englishKeyboard.keyData = new XML(keyboardLoader.data);
+				virtualKey.addChild(englishKeyboard);
+				configureInputField(UserForm.userFirstName);
+				configureInputField(UserForm.userLastName);
+				configureInputField(UserForm.userEmail);
+				configureInputField(ScoreCapture.scoreValue);
+				//englishKeyboard.show();
+				//englishKeyboard.focus=userFirstName;
+				englishKeyboard.alpha=0;
+				englishKeyboard.visible=false;
+			}
+			
+			protected function configureInputField(tf:TextInput):void
+			{
+				
+				tf.addEventListener(FocusEvent.FOCUS_IN, handleFocusIn);
+				tf.addEventListener(MouseEvent.CLICK, handleInputClick);
+				tf.addEventListener(KeyboardEvent.KEY_DOWN, handleKeyboardDown);
+			}
+			protected function handleFocusIn(e:FocusEvent):void {
+				trace("focus in:"+e.target);
+				var activeField:TextInput = e.currentTarget as TextInput;
+				englishKeyboard.focus=activeField;
+				//activeField.backgroundColor = INPUT_FIELD_COLOUR;
+				
+				
+			}
+			protected function handleInputClick(e:MouseEvent):void {
+				trace("input click"+e.target);
+				englishKeyboard.show();
+			}
+			protected function handleKeyboardDown(e:KeyboardEvent):void {
+				trace("keyboard event"+e.target);
 			}
 			
 			protected var navigationTimer:Timer;
@@ -502,7 +549,7 @@
 						{
 							nextScreen = UserForm;
 						}
-
+						
 						
 						if (stackStr == "CameraCapture")
 						{
@@ -583,6 +630,7 @@
 			
 			protected function doNavigation(e:ViewEvent):void
 			{
+				englishKeyboard.hide();
 				clearPopups();
 				hideDropshadow();
 				switch (e.location)
@@ -647,7 +695,7 @@
 						this.dispatchEvent( new ViewEvent( ViewEvent.LOCATION_FACEBOOK ));
 						break;
 					
-
+					
 					
 					case ViewEvent.LOCATION_REGISTRATION_COMPLETE:
 						if (this.ApplicationType == APPLICATION_TYPE_REGISTRATION)
@@ -811,6 +859,18 @@
 				PopUpManager.centerPopUp(passwordbox);
 				this.dispatchEvent( new ApplicationEvent( ApplicationEvent.POPUP_OPEN ) );
 				centerPopups();
+				/*if (this.getElementIndex( virtualKey )< this.getElementIndex( passwordbox) )
+				{
+					this.swapElements( virtualKey, passwordbox);
+				}*/
+				
+				passwordbox.invalidateDisplayList();
+
+
+				
+				//this.setElementIndex(virtualKey,this.numElements-1);
+				configureInputField(passwordbox.passwordInput);
+				
 			}
 			protected function getActivePopup():Array
 			{
@@ -1019,29 +1079,24 @@
 			 * Here we initialize <code>appUpdater</code> and set some properties
 			 */ 
 			private function checkUpdate():void {
+				setApplicationVersion();
 				// we set the URL for the update.xml file
-				appUpdater.updateURL = "http://www.bpllive.com/updategreenscreen/update.xml";
+				appUpdater.updateURL = "http://skyexperience.co.uk/updater/update.xml";
 				//we set the event handlers for INITIALIZED and ERROR
 				appUpdater.addEventListener(UpdateEvent.INITIALIZED, onUpdate);
 				appUpdater.addEventListener(ErrorEvent.ERROR, onError);
 				//we can hide the dialog asking for permission for checking for a new update;
 				//if you want to see it just leave the default value (or set true).
-				appUpdater.isCheckForUpdateVisible = true;
+				appUpdater.isCheckForUpdateVisible = false;
 				//if isFileUpdateVisible is set to true, File Update, File No Update, 
 				//and File Error dialog boxes will be displayed
-				appUpdater.isFileUpdateVisible = true;
+				appUpdater.isFileUpdateVisible = false;
 				//if isInstallUpdateVisible is set to true, the dialog box for installing the update is visible
-				appUpdater.isInstallUpdateVisible = true;
+				appUpdater.isInstallUpdateVisible = false;
 				//we initialize the updater
 				appUpdater.initialize();
 			}
 			
-			/**
-			 * Handler function triggered by the ApplicationUpdater.initialize;
-			 * The updater was initialized and it is ready to take commands 
-			 * (such as <code>checkNow()</code>
-			 * @param UpdateEvent 
-			 */ 
 			private function onUpdate(event:UpdateEvent):void {
 				//start the process of checking for a new update and to install
 				appUpdater.checkNow();
@@ -1053,6 +1108,15 @@
 			 */ 
 			private function onError(event:ErrorEvent):void {
 				Alert.show(event.toString());
+			}
+			
+			/**
+			 * A simple code just to read the current version of the application 
+			 * and display it in a label. 
+			 */ 
+			private function setApplicationVersion():void {
+				var appXML:XML = NativeApplication.nativeApplication.applicationDescriptor;
+				var ns:Namespace = appXML.namespace();
 			}
 			
 			
@@ -1077,7 +1141,7 @@
 			<mx:Move xFrom="{-Stack.width}"/>
 			
 		</s:Parallel>
-			<s:GlowFilter id="glow" blurX="20" blurY="20" alpha="0.5" strength="20" quality="3"  color="0xFFFFFF" />
+		<s:GlowFilter id="glow" blurX="20" blurY="20" alpha="0.5" strength="20" quality="3"  color="0xFFFFFF" />
 		<s:Animate id="glowAnimation" target="{glow}" duration="250">
 			<s:motionPaths>
 				<s:SimpleMotionPath valueFrom="0" valueTo="200" property="blurX"/>
@@ -1098,7 +1162,7 @@
 		</s:backgroundFill>
 		<s:HGroup verticalAlign="middle" width="100%" height="100">
 			<s:HGroup left="20" paddingLeft="20">
-			
+				
 				<local:SkyLogo click="defaultView()"  useHandCursor="true" mouseEnabled="true"/>
 				<!--s:Button skinClass="skins.BasicButton" styleName="nav" icon="@Embed('assets/images/logo_small.png')" click="{defaultView()}"/-->
 			</s:HGroup>
@@ -1167,4 +1231,5 @@
 		</s:Group>
 	</s:VGroup>
 	<debug:DebugPanel left="0" top="0" id="debugPanel" visible="false"/>
+	<s:SpriteVisualElement id="virtualKey"/>
 </s:WindowedApplication>

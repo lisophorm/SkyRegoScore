@@ -56,9 +56,10 @@ package uk.co.huydinh.app.champion.keyboard
 			_face = new Shape();
 			addChild(_face);
 			
-			var format:TextFormat = new TextFormat("Arial", 24);
+			var format:TextFormat = new TextFormat("StandardRegularNOCFF", 24);
 			
 			_tf = new TextField();
+			_tf.embedFonts=true;
 			_tf.autoSize = TextFieldAutoSize.LEFT;
 			_tf.defaultTextFormat = format;
 			addChild(_tf);

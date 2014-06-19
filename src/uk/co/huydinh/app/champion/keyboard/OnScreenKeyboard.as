@@ -208,10 +208,11 @@
 			var o:Object = {autoAlpha:1};
 			if (focus) {
 				var p:Point = parent.globalToLocal(focus.parent.localToGlobal(new Point(focus.x, focus.y)));
-				o.x = (1024 - width) * .5;
+				o.x = (stage.width - width) * .5;
 				//
-				o.y = (p.y-height ) - 40;
+				o.y = (p.y+focus.height );
 			}
+			trace("focusing"+focus.name);
 			TweenMax.to(this, .5, o);
 			
 		}

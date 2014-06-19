@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" minHeight="450" minWidth="700"  xmlns:local="*" > 
+	
+	<fx:Script>
+		<![CDATA[
+			import com.greensock.TweenLite;
+			import com.greensock.plugins.GlowFilterPlugin;
+			import com.greensock.plugins.TweenPlugin;
+			TweenPlugin.activate([GlowFilterPlugin]);
+			
+			
+			public var text1:String="";
+			
+			
+			public var text2:String="";
+			
+			protected function create(event:Event):void
+			{
+				TweenLite.to(labelFrame, 2, {glowFilter:{color:0xFFFFFF, blurX:10, blurY:10, strength:1, alpha:1, knockout: true}});
+			}
+			
+			protected function group1_addedToStageHandler(event:Event):void
+			{
+				// TODO Auto-generated method stub
+				
+			}
+		]]>
+    
+
+	</fx:Script>
+	<local:SkyTextBoxGlow id="labelFrame" top="0" left="0" right="0" bottom="0" />
+	<local:SkyTextBox top="0" left="0" right="0" bottom="0"   />
+	<s:VGroup horizontalAlign="center" verticalAlign="middle" bottom="30"  top="30" left="30" right="30" >
+		<s:Label textAlign="center" fontFamily="StandardRegular" fontSize="78" typographicCase="uppercase" text="ciao"  />
+		<s:Spacer width="10" height="20" />
+		<s:Label textAlign="center" fontFamily="StandardRegular" fontSize="78" typographicCase="uppercase" text="mamma" />
+	</s:VGroup>
+
+	
+</s:Group>
