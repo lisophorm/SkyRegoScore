@@ -18,7 +18,7 @@
 			
 			protected function create(event:Event):void
 			{
-				TweenLite.to(labelFrame, 2, {glowFilter:{color:0xFFFFFF, blurX:10, blurY:10, strength:1, alpha:1, knockout: true}});
+				TweenLite.to(labelFrame, 2, {glowFilter:{color:0xFFFFFF, blurX:30, blurY:30, strength:2, alpha:0.5, knockout: true}});
 			}
 			
 			protected function group1_addedToStageHandler(event:Event):void

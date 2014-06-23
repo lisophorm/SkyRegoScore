@@ -105,7 +105,7 @@ s|FormHeading s|Label#labelDisplay {
 }
 
 s|FormHeading#frontMessage s|Label#labelDisplay {
-	fontSize: 52;
+	fontSize: 57;
 	fontFamily: "StandardRegularAllCase";
 	color: #FFFFFF;
 	fontWeight: normal;
@@ -116,11 +116,11 @@ s|FormItem
 }
 s|FormItem s|Label#labelDisplay {
 	color: #FFFFFF;
-	fontSize: 52;
+	fontSize: 57;
 	
 }
 #labelDisplay, .formItemLabelStyles {
-	fontSize: 52;
+	fontSize: 57;
 	fontFamily: "StandardRegularAllCase";
 	color: #FFFFFF;
 	fontWeight: normal;
@@ -291,4 +291,12 @@ s|TextArea s|RichEditableText {
 s|FormItem  {
 	
 	
+}
+s|FormItem #errorTextDisplay
+{
+	fontSize: 32;
+	fontFamily:"Arial";
+	fontStyle:normal;
+	fontWeight:normal;
+	color:#00ff00;
 }

@@ -480,8 +480,8 @@
 	<s:VGroup id="welcomeScreen" verticalAlign="middle" horizontalAlign="center" includeIn="READY_TO_SCAN" width="1366" height="100%">
 		
 		<local:SkyPanelWelcome visible="{ this.parentApplication.ApplicationType=='REGISTRATION' }" includeInLayout="{ this.parentApplication.ApplicationType=='REGISTRATION' }" />
-		<local:SkyPanelWelcomeControl visible="{ this.parentApplication.ApplicationType=='SCOREGAME1' }" includeInLayout="{ this.parentApplication.ApplicationType=='SCOREGAME1' }" />
-		<local:SkyPanelWelcomeReaction visible="{ this.parentApplication.ApplicationType=='SCOREGAME2' }" includeInLayout="{ this.parentApplication.ApplicationType=='SCOREGAME2' }" />
+		<local:SkyPanelWelcomeAgility visible="{ this.parentApplication.ApplicationType=='SCOREGAME1' }" includeInLayout="{ this.parentApplication.ApplicationType=='SCOREGAME1' }" />
+		<local:SkyPanelWelcomeSpeed visible="{ this.parentApplication.ApplicationType=='SCOREGAME2' }" includeInLayout="{ this.parentApplication.ApplicationType=='SCOREGAME2' }" />
 		
 		<!-- s:Label id="welcomeLabel" textAlign="center" width="90%" styleName="registrationOne" text="WELCOME TO{'\n'}BARCLAYS PREMIER LEAGUE LIVE">
 			<s:filters>

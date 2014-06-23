@@ -42,7 +42,7 @@
 				trace("scorecapture init event");
 				settings = Settings.instance;
 				gameId = this.parentApplication.ApplicationType=="SCOREGAME1"?1:2;
-				gameName.text=(this.parentApplication.ApplicationType=="SCOREGAME1"?"Control Game":"Reaction Game");
+				gameName.text=(this.parentApplication.ApplicationType=="SCOREGAME1"?"AGILITY":"SPEED");
 				getPrefs.url=this.parentApplication.localURL+'/api/index.php/skytestlab/v1/preferences/';
 				getPrefs.send();
 				scoreValue.text = "";
@@ -139,10 +139,10 @@
 	
 	<s:HGroup gap="0" horizontalAlign="left" paddingTop="40" verticalAlign="top">
 
-		<s:HGroup gap="0" verticalAlign="middle" paddingRight="-20" paddingTop="15" rotation="0" horizontalAlign="right">
+		<!--s:HGroup gap="0" verticalAlign="middle" paddingRight="-20" paddingTop="15" rotation="0" horizontalAlign="right">
 			<local:SkyIconBallControl visible="{ this.parentApplication.ApplicationType=='SCOREGAME1' }" includeInLayout="{ this.parentApplication.ApplicationType=='SCOREGAME1' }"/>
 			<local:SkyIconReactionControl visible="{ this.parentApplication.ApplicationType=='SCOREGAME2' }" includeInLayout="{ this.parentApplication.ApplicationType=='SCOREGAME2' }"/>
-		</s:HGroup>
+		</s:HGroup-->
 	
 		<s:VGroup>
 				<s:Form>

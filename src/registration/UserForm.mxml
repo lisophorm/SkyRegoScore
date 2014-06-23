@@ -42,6 +42,8 @@
 			}
 			public function init(event:Event=null):void
 			{
+				trace("**********userform INIT");
+				
 				clearData();
 				clearForm();
 				settings = Settings.instance;
@@ -209,15 +211,15 @@
 		
 		
 		<s:FormItem label="First Name:" skinClass="skins.BarclaysFormItem">				
-			<s:TextInput id="userFirstName" width="512.95" autoCapitalize="word" fontSize="52" skinClass="skins.text.SkyTextInput" keyDown="keyHandler(event)"/>
+			<s:TextInput id="userFirstName" width="512.95" autoCapitalize="word" fontSize="57" skinClass="skins.text.SkyTextInput" keyDown="keyHandler(event)"/>
 		</s:FormItem>
 		
 		<s:FormItem label="Last Name:" skinClass="skins.BarclaysFormItem">
-			<s:TextInput id="userLastName" width="512.95" autoCapitalize="word" fontSize="52" skinClass="skins.text.SkyTextInput" keyDown="keyHandler(event)"/>
+			<s:TextInput id="userLastName" width="512.95" autoCapitalize="word" fontSize="57" skinClass="skins.text.SkyTextInput" keyDown="keyHandler(event)"/>
 		</s:FormItem>
 		
 		<s:FormItem label="Email:" skinClass="skins.BarclaysFormItem">
-			<s:TextInput id="userEmail" width="512.95" skinClass="skins.text.SkyTextInput"  fontSize="52" keyDown="keyHandler(event)"/>
+			<s:TextInput id="userEmail" width="512.95" skinClass="skins.text.SkyTextInput"  fontSize="57" keyDown="keyHandler(event)"/>
 		</s:FormItem>
 		
 		<s:Spacer height="30"/>
