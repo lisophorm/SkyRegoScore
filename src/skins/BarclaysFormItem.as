@@ -30,6 +30,13 @@ package skins
 				var padBottom:Number = getStyle("paddingBottom");
 				labelDisplay.y = Math.max(0, h - labelDisplay.height - padBottom);
 			}
+			if(indicatorDisplay) {
+				indicatorDisplay.smooth=true;
+			}
+			if(errorTextDisplay) {
+				errorTextDisplay.visible=false;
+				errorTextDisplay.includeInLayout=false;
+			}
 		}  
 				
 	}

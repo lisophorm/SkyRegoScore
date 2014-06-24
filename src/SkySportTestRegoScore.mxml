@@ -1164,7 +1164,7 @@
 			</s:LinearGradient>
 		</s:backgroundFill>
 		<s:HGroup verticalAlign="middle" width="100%" height="100">
-			<s:HGroup left="20" paddingLeft="20">
+			<s:HGroup left="20" paddingLeft="20" paddingTop="70">
 				
 				<local:SkyLogo click="defaultView()"  useHandCursor="true" mouseEnabled="true"/>
 				<!--s:Button skinClass="skins.BasicButton" styleName="nav" icon="@Embed('assets/images/logo_small.png')" click="{defaultView()}"/-->

@@ -46,6 +46,8 @@
 				
 				clearData();
 				clearForm();
+				this.invalidateDisplayList();
+				
 				settings = Settings.instance;
 				if (this.parentApplication.data!=null)
 				{
@@ -71,6 +73,9 @@
 				userFirstName.text = ""; 
 				userLastName.text = ""; 
 				userEmail.text = ""; 
+				userFirstName.errorString="";
+				userLastName.errorString="";
+				userEmail.errorString="";
 				
 				termsCheck.selected = false;
 				opt_A.selected = opt_B.selected = opt_C.selected = false;
@@ -170,13 +175,7 @@
 			
 			protected function keyHandler(event : KeyboardEvent):void
 			{
-				if(event.keyCode == 13)
-				{
-					if(stage)
-					{
-						stage.focus = null;
-					}
-				}
+				
 			}
 			
 		]]>
@@ -210,7 +209,7 @@
 		</s:layout>
 		
 		
-		<s:FormItem label="First Name:" skinClass="skins.BarclaysFormItem">				
+		<s:FormItem label="First Name:" skinClass="skins.BarclaysFormItem"  requiredIndicatorSource="assets/images/error.png">				
 			<s:TextInput id="userFirstName" width="512.95" autoCapitalize="word" fontSize="57" skinClass="skins.text.SkyTextInput" keyDown="keyHandler(event)"/>
 		</s:FormItem>
 		

@@ -113,6 +113,8 @@ s|FormHeading#frontMessage s|Label#labelDisplay {
 s|FormItem
 {
 	skinClass: ClassReference("skins.BarclaysFormItem");	
+	requiredIndicatorSource:"assets/images/error.png";
+	errorIndicatorSource:"assets/images/error.png";
 }
 s|FormItem s|Label#labelDisplay {
 	color: #FFFFFF;
@@ -288,10 +290,10 @@ s|TextArea s|RichEditableText {
 
 }
 
-s|FormItem  {
-	
-	
+s|FormItem {
+	requiredIndicatorSource: "assets/images/error.png";
 }
+
 s|FormItem #errorTextDisplay
 {
 	fontSize: 32;
@@ -299,4 +301,7 @@ s|FormItem #errorTextDisplay
 	fontStyle:normal;
 	fontWeight:normal;
 	color:#00ff00;
+}
+s|FormItem #indicatorDisplay {
+	smoothingQuality:high;
 }
