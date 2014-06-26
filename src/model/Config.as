@@ -24,8 +24,8 @@ package model
 		
 		public function Config()
 		{
-			prefsFile = File.applicationStorageDirectory;
-			prefsFile = prefsFile.resolvePath("assets/xml/preferences.xml"); 
+			prefsFile = File.documentsDirectory;
+			prefsFile = prefsFile.resolvePath("SkyTestApp/preferences.xml"); 
 			trace("preferences: "+prefsFile.nativePath);
 			readXML();
 		}

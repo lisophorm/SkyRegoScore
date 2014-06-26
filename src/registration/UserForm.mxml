@@ -6,6 +6,7 @@
 		>
 	<fx:Script>
 		<![CDATA[
+			import com.alfo.utils.StringUtils;
 			import com.alfo.utils.VirtualKeyboard;
 			import com.utils.Console;
 			
@@ -14,7 +15,6 @@
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
 			import mx.validators.Validator;
-			
 			
 			import events.KioskError;
 			import events.KioskEvent;
@@ -95,13 +95,14 @@
 					
 				} else if (isValidForm) 
 				{
+					
 					settings.userData.firstName = userFirstName.text;
 					settings.userData.lastName = userLastName.text;
 					//send data
 					saveData.send({urn: settings.userData.urn, 
 						location_id:this.parentApplication.location_id,
-						firstname:userFirstName.text, 
-						lastname: userLastName.text, 
+						firstname:StringUtils.capitalize(userFirstName.text, true),
+						lastname: StringUtils.capitalize(userLastName.text, true),
 						email: userEmail.text, 
 						optin1: opt_A.selected ? 1 : 0,
 						optin2: opt_B.selected ? 1 : 0,

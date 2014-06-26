@@ -11,7 +11,7 @@
 			import com.utils.Console;
 			
 			import flash.events.ErrorEvent;
-			
+		
 			import mx.controls.Alert;
 			import mx.events.FlexEvent;
 			import mx.managers.PopUpManager;
@@ -138,12 +138,13 @@
 			
 			protected function fullscreen(e:Event=null):void
 			{
+				trace("*********** called fullscreen");
 				stage.displayState =  StageDisplayState.FULL_SCREEN_INTERACTIVE;
 				
 				stage.scaleMode = StageScaleMode.NO_SCALE;
 				this.reScaleMainContent();
 				
-				stage.addEventListener(KeyboardEvent.KEY_DOWN, typingHandler); 
+				//stage.addEventListener(KeyboardEvent.KEY_DOWN, typingHandler); 
 			}
 			
 			protected function reScaleMainContent():void
@@ -316,6 +317,8 @@
 				configureInputField(SelectApplication.locationID);
 				//englishKeyboard.show();
 				//englishKeyboard.focus=userFirstName;
+				englishKeyboard.scaleX=1.4;
+				englishKeyboard.scaleY=1.4;
 				englishKeyboard.alpha=0;
 				englishKeyboard.visible=false;
 			}
@@ -824,6 +827,7 @@
 			}
 			protected function defaultView(e:Event=null):void
 			{
+				fullscreen();
 				this.dispatchEvent( new ViewEvent( ViewEvent.LOCATION_RESTART ));
 			}
 			
@@ -1156,13 +1160,7 @@
 	<fx:Style source="assets/css/Fonts.css" />
 	<fx:Style source="assets/css/Main.css" />
 	
-	<s:BorderContainer id="navigationbar" includeInLayout="false" borderAlpha="0" width="{this.stage.stageWidth}" height="150" click="fullscreen(event)">
-		<s:backgroundFill>
-			<s:LinearGradient rotation="90">
-				<s:GradientEntry color="0x000000" alpha="0"/>
-				<s:GradientEntry color="0x000000" alpha="0"/>
-			</s:LinearGradient>
-		</s:backgroundFill>
+	<s:Group id="navigationbar" includeInLayout="false" width="{this.stage.stageWidth}" height="150"  mouseEnabled="false">
 		<s:HGroup verticalAlign="middle" width="100%" height="100">
 			<s:HGroup left="20" paddingLeft="20" paddingTop="70">
 				
@@ -1176,7 +1174,7 @@
 				<s:Button skinClass="skins.BasicButton" styleName="nav" icon="@Embed('assets/images/core/padlock.png')" click="config(event)" color="0xFFFFFF" />
 			</s:HGroup>		
 		</s:HGroup>
-	</s:BorderContainer>
+	</s:Group>
 	
 	<s:VGroup id="contentholder" width="100%" height="100%" verticalAlign="middle" horizontalAlign="center">
 		

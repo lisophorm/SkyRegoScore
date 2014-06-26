@@ -107,7 +107,7 @@
 	<s:VGroup horizontalAlign="left" verticalAlign="middle" width="1180" height="100%" includeIn="paths">
 		
 			<s:FormHeading label="CONFIGURATION DETAILS:" />
-			<s:Scroller width="100%" height="500" verticalScrollPolicy="auto" horizontalScrollPolicy="off">
+			<s:Scroller width="100%" height="100%" verticalScrollPolicy="auto" horizontalScrollPolicy="off">
 				<s:Group height="500" width="100%" textAlign="left">	
 				<s:VGroup>
 					
@@ -125,11 +125,11 @@
 							<s:TextInput id="locationID" width="650" height="30" color="0x000000" fontFamily="Arial"/>
 						</s:FormItem>
 						
-						<s:FormItem width="365" label="Calibrator location (watchfolder):" fontFamily="Arial">
+						<s:FormItem width="365" label="Calibrator location (watchfolder):" fontFamily="Arial" visible="false" includeInLayout="false">
 							<s:TextInput id="calibrator" width="650" height="30" color="0x000000" fontFamily="Arial"/>
 						</s:FormItem>
 					
-						<s:HGroup>
+						<s:HGroup visible="false" includeInLayout="false">
 
 							<s:FormItem width="365" label="URN Length:" >
 									<s:TextInput id="urnLength" width="150" color="0x000000"  height="30" fontFamily="Arial"/>

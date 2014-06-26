@@ -9,11 +9,12 @@
 		<![CDATA[
 			import com.greensock.TweenMax;
 			
+			import mx.events.FlexEvent;
+			
+			import events.KioskError;
 			import events.ViewEvent;
 			
 			import model.Settings;
-			
-			import mx.events.FlexEvent;
 			
 			protected var loader : URLLoader;
 			protected var parameters:URLVariables;
@@ -42,7 +43,7 @@
 				loader.addEventListener(Event.COMPLETE, onLoadComplete);
 				loader.addEventListener(IOErrorEvent.IO_ERROR, onLoadError);
 				
-				TweenMax.delayedCall(3, hide);
+				
 				//parameters.urn = settings.userData.urn;
 				//request.data = parameters;
 				loader.load(request);
@@ -51,6 +52,7 @@
 			
 			protected function onLoadComplete(event : Event):void
 			{
+				TweenMax.delayedCall(3, hide);
 				trace("WelcomeBackView :: onLoadComplete :: " + loader.data);
 				
 				var result : Object = JSON.parse(loader.data);
@@ -63,11 +65,15 @@
 					
 					welcomeBackUser.text2 = result.data["firstname"];
 					//TweenMax.to(welcomeBackUser, .3, {alpha : 1});
+				} else {
+					this.parentApplication.dispatchEvent(new KioskError(KioskError.ERROR, result["message"], "Error"));
 				}
 			}
 			
 			protected function onLoadError(event : IOErrorEvent):void
 			{
+				this.parentApplication.dispatchEvent(new KioskError(KioskError.ERROR, event.text, "Connection error"));
+
 				trace("WelcomeBackView :: onLoadError :: " + event.errorID);
 			}
 			

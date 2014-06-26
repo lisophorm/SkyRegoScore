@@ -211,13 +211,15 @@
 				o.x = (stage.width - width) * .5;
 				//
 				if(focus.name=="thePassword") {
-					o.y = (p.y+focus.height + 150);
+					o.y = (p.y+focus.height + 100);
 				} else if(focus.name=="theScore") {
-					o.y = (p.y+(focus.height/2) );
+					o.y = (p.y+(focus.height/2)-50 );
 				} else {
 					o.y = (p.y+focus.height );
 				}
-				
+				if((this.height+this.y)>stage.height) {
+					o.y=stage.height-this.height;
+				}
 			}
 			trace("focusing"+focus.name);
 			TweenMax.to(this, .5, o);
